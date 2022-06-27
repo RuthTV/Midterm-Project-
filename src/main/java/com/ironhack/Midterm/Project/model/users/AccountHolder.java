@@ -18,14 +18,14 @@ public class AccountHolder extends User{
     public AccountHolder() {
     }
 
-    public AccountHolder(long id, String firstName, String lastName, Date dateOfBirth, Address primaryAddress) {
-        super(id, firstName, lastName);
+    public AccountHolder(long id, String name, Date dateOfBirth, Address primaryAddress) {
+        super(id, name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
     }
 
-    public AccountHolder(long id, String firstName, String lastName, Date dateOfBirth, Address primaryAddress, String mailingAddress) {
-        super(id, firstName, lastName);
+    public AccountHolder(long id, String name, Date dateOfBirth, Address primaryAddress, String mailingAddress) {
+        super(id, name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;

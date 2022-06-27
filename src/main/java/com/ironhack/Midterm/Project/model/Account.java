@@ -65,8 +65,9 @@ public abstract class Account {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
+    public String setBalance(BigDecimal balance) {
         this.balance = balance;
+        return "The balance has been set";
     }
 
     public String getSecretKey() {
