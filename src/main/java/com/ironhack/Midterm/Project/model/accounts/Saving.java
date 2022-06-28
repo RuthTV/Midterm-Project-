@@ -1,37 +1,36 @@
-package com.ironhack.Midterm.Project.model;
+package com.ironhack.Midterm.Project.model.accounts;
 
 import com.ironhack.Midterm.Project.model.users.User;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
-public class Saving extends Account{
+public class Saving extends Account {
     private BigDecimal interestRate;
 
     public Saving() {
     }
 
-    public Saving(long id, BigDecimal balance, String secretKey, User primaryOwner, Date creationDate) {
-        super(id, balance, secretKey, primaryOwner, creationDate);
+    public Saving(Money balance, String secretKey, User primaryOwner, Date creationDate) {
+        super(balance, secretKey, primaryOwner, creationDate);
         this.interestRate = BigDecimal.valueOf(0.0025);
     }
 
-    public Saving(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
-        super(id, balance, secretKey, primaryOwner, secondayOwner, creationDate);
+    public Saving(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
+        super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.interestRate = BigDecimal.valueOf(0.0025);
     }
 
-    public Saving(long id, BigDecimal balance, String secretKey, User primaryOwner, Date creationDate, BigDecimal interestRate) {
-        super(id, balance, secretKey, primaryOwner, creationDate);
+    public Saving(Money balance, String secretKey, User primaryOwner, Date creationDate, BigDecimal interestRate) {
+        super(balance, secretKey, primaryOwner, creationDate);
         setInterestRate(interestRate);
     }
 
-    public Saving(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, BigDecimal interestRate) {
-        super(id, balance, secretKey, primaryOwner, secondayOwner, creationDate);
+    public Saving(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, BigDecimal interestRate) {
+        super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         setInterestRate(interestRate);
     }
 

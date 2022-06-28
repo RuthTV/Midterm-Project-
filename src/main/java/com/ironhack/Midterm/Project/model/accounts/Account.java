@@ -1,4 +1,4 @@
-package com.ironhack.Midterm.Project.model;
+package com.ironhack.Midterm.Project.model.accounts;
 
 
 import com.ironhack.Midterm.Project.enums.Status;
@@ -13,9 +13,10 @@ import java.sql.Date;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Account {
     @Id
- //   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private BigDecimal balance;
+    @Embedded
+    private Money balance;
     private String secretKey;
 
     @ManyToOne
@@ -32,8 +33,7 @@ public abstract class Account {
     public Account() {
     }
 
-    public Account(long id, BigDecimal balance, String secretKey, User primaryOwner, Date creationDate) {
-        this.id = id;
+    public Account(Money balance, String secretKey, User primaryOwner, Date creationDate) {
         this.balance = balance;
         this.secretKey = secretKey;
         this.primaryOwner = primaryOwner;
@@ -42,8 +42,7 @@ public abstract class Account {
         this.penaltyFee = BigDecimal.valueOf(40);
     }
 
-    public Account(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
-        this.id = id;
+    public Account(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
         this.balance = balance;
         this.secretKey = secretKey;
         this.primaryOwner = primaryOwner;
@@ -53,19 +52,11 @@ public abstract class Account {
         this.penaltyFee = BigDecimal.valueOf(40);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getBalance() {
+    public Money getBalance() {
         return balance;
     }
 
-    public String setBalance(BigDecimal balance) {
+    public String setBalance(Money balance) {
         this.balance = balance;
         return "The balance has been set";
     }
@@ -117,8 +108,7 @@ public abstract class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "id=" + id +
-                ", balance=" + balance +
+                "balance=" + balance +
                 ", secretKey='" + secretKey + '\'' +
                 ", primaryOwner=" + primaryOwner +
                 ", secondayOwner=" + secondayOwner +

@@ -1,52 +1,51 @@
-package com.ironhack.Midterm.Project.model;
+package com.ironhack.Midterm.Project.model.accounts;
 
 import com.ironhack.Midterm.Project.model.users.User;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
-public class CreditCard extends Account{
+public class CreditCard extends Account {
     private BigDecimal interestRate;
     private BigDecimal creditLimit;
 
     public CreditCard() {
     }
 
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate) {
-        super(id, balance, secretKey, primaryOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate) {
+        super(balance, secretKey, primaryOwner, creationDate);
         setInterestRate(interestRate);
         this.creditLimit = BigDecimal.valueOf(100);
     }
 
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate) {
-        super(id, balance, secretKey, primaryOwner, secondayOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate) {
+        super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         setInterestRate(interestRate);
         this.creditLimit = BigDecimal.valueOf(100);
     }
 
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, Date creationDate, BigDecimal creditLimit) {
-        super(id, balance, secretKey, primaryOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, Date creationDate, BigDecimal creditLimit) {
+        super(balance, secretKey, primaryOwner, creationDate);
         this.interestRate = BigDecimal.valueOf(0.2);
         setCreditLimit(creditLimit);
     }
 
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, BigDecimal creditLimit) {
-        super(id, balance, secretKey, primaryOwner, secondayOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, BigDecimal creditLimit) {
+        super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.interestRate = BigDecimal.valueOf(0.2);
         setCreditLimit(creditLimit);
     }
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate,  BigDecimal creditLimit) {
-        super(id, balance, secretKey, primaryOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate,  BigDecimal creditLimit) {
+        super(balance, secretKey, primaryOwner, creationDate);
         this.interestRate = interestRate;
         this.creditLimit = creditLimit;
     }
 
-    public CreditCard(long id, BigDecimal balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate, BigDecimal creditLimit) {
-        super(id, balance, secretKey, primaryOwner, secondayOwner, creationDate);
+    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate, BigDecimal creditLimit) {
+        super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.interestRate = interestRate;
         this.creditLimit = creditLimit;
     }

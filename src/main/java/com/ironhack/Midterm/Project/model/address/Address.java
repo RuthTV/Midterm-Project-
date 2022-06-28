@@ -5,14 +5,11 @@ import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-
-@Entity
+@Embeddable
 public class Address {
-    @Id
     private long id;
     private String street;
     private int postCode;
-    @OneToMany(mappedBy = "primaryAddress", fetch = FetchType.EAGER)
     private List<AccountHolder> accountHolder;
 
     public List<AccountHolder> getAccountHolder() {

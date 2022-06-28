@@ -1,7 +1,6 @@
 package com.ironhack.Midterm.Project.model.users;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -11,8 +10,8 @@ public class ThirdParty extends User{
     public ThirdParty() {
     }
 
-    public ThirdParty(long id, String name, String hashedKey) {
-        super(id, name);
+    public ThirdParty(String username, String password, String hashedKey) {
+        super(username, password);
         this.hashedKey = hashedKey;
     }
 
@@ -23,5 +22,6 @@ public class ThirdParty extends User{
     public void setHashedKey(String hashedKey) {
         this.hashedKey = hashedKey;
     }
+
 
 }
