@@ -4,14 +4,15 @@ import com.ironhack.Midterm.Project.model.accounts.Account;
 import com.ironhack.Midterm.Project.model.role.Role;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String username;
 
@@ -62,5 +63,30 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", accounts=" + accounts +
+                ", secondaryAccounts=" + secondaryAccounts +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username) && password.equals(user.password) && roles.equals(user.roles) && accounts.equals(user.accounts) && Objects.equals(secondaryAccounts, user.secondaryAccounts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, roles, accounts, secondaryAccounts);
     }
 }

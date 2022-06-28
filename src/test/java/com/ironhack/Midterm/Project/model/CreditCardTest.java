@@ -1,23 +1,5 @@
 package com.ironhack.Midterm.Project.model;
 
-import com.ironhack.Midterm.Project.model.address.Address;
-import com.ironhack.Midterm.Project.model.users.AccountHolder;
-import com.ironhack.Midterm.Project.model.users.Admin;
-import com.ironhack.Midterm.Project.model.users.User;
-import com.ironhack.Midterm.Project.repository.AccountRepository;
-import com.ironhack.Midterm.Project.repository.AddressRepository;
-import com.ironhack.Midterm.Project.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 //@SpringBootTest
 //class CreditCardTest {
 //    @Autowired

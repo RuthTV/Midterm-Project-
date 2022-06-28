@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Embedded
     private Money balance;
     private String secretKey;

@@ -12,7 +12,12 @@ public class AccountHolder extends User{
     private Date dateOfBirth;
     @Embedded
     private Address primaryAddress;
-    private String mailingAddress;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "mailing_street")),
+            @AttributeOverride(name = "postCode", column = @Column(name = "mailing_postal_code"))
+    })
+    private Address mailingAddress;
 
     public AccountHolder() {
     }
@@ -23,7 +28,7 @@ public class AccountHolder extends User{
         this.primaryAddress = primaryAddress;
     }
 
-    public AccountHolder(String username, String password, Date dateOfBirth, Address primaryAddress, String mailingAddress) {
+    public AccountHolder(String username, String password, Date dateOfBirth, Address primaryAddress, Address mailingAddress) {
         super(username, password);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
@@ -46,21 +51,12 @@ public class AccountHolder extends User{
         this.primaryAddress = primaryAddress;
     }
 
-    public String getMailingAddress() {
+    public Address getMailingAddress() {
         return mailingAddress;
     }
 
-    public void setMailingAddress(String mailingAddress) {
+    public void setMailingAddress(Address mailingAddress) {
         this.mailingAddress = mailingAddress;
-    }
-
-    @Override
-    public String toString() {
-        return "AccountHolder{" +
-                "dateOfBirth=" + dateOfBirth +
-                ", primaryAddress='" + primaryAddress + '\'' +
-                ", mailingAddress='" + mailingAddress + '\'' +
-                '}';
     }
 
 }

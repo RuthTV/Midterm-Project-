@@ -3,16 +3,36 @@ package com.ironhack.Midterm.Project.model.users;
 import javax.persistence.*;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "id")
-public class ThirdParty extends User{
+public class ThirdParty{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
     private String hashedKey;
 
     public ThirdParty() {
     }
 
-    public ThirdParty(String username, String password, String hashedKey) {
-        super(username, password);
+    public ThirdParty(String name, String hashedKey) {
+        this.name = name;
         this.hashedKey = hashedKey;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getHashedKey() {
@@ -22,6 +42,4 @@ public class ThirdParty extends User{
     public void setHashedKey(String hashedKey) {
         this.hashedKey = hashedKey;
     }
-
-
 }
