@@ -58,7 +58,7 @@ public class CreditCardControllerImpl implements CreditCardController {
     @PatchMapping("/creditCards/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        creditCardService.updateBalance(id, balance.getBalance());
+        creditCardService.updateBalance(id, balance.getAmount());
     }
 
     @DeleteMapping("/creditCards/{id}")

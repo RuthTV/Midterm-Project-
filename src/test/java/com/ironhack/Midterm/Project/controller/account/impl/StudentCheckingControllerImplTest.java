@@ -2,16 +2,13 @@ package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.Midterm.Project.model.accounts.Money;
-import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
-import com.ironhack.Midterm.Project.repositories.accountRepository.SavingRepository;
 import com.ironhack.Midterm.Project.repositories.accountRepository.StudentCheckingRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
-import com.ironhack.Midterm.Project.service.account.interfaces.SavingService;
 import com.ironhack.Midterm.Project.service.account.interfaces.StudentCheckingService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,8 +56,8 @@ class StudentCheckingControllerImplTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Ambasaguas 55", 48891);
         admin = new Admin("Ruth Telleria", "cbmnchmhc");
-        money = new Money(BigDecimal.valueOf(2000000));
-        money2 = new Money(BigDecimal.valueOf(245000));
+        money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
+        money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
         accountHolder = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
         studentChecking1 = new StudentChecking(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
         studentChecking2 = new StudentChecking(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
@@ -68,7 +66,7 @@ class StudentCheckingControllerImplTest {
         studentCheckingRepository.saveAll(List.of(studentChecking1, studentChecking2));
     }
 
-    @Test
+
     @AfterEach
     void tearDown() {
         studentCheckingRepository.deleteAll();
@@ -82,8 +80,8 @@ class StudentCheckingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fngmhg_fhª"));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
@@ -102,12 +100,12 @@ class StudentCheckingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fzhgnhª"));
-        assertFalse(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("245000"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
     @Test
     void store() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         StudentChecking studentChecking = new StudentChecking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(studentChecking);
@@ -121,12 +119,12 @@ class StudentCheckingControllerImplTest {
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Lorena Pardo"));
-        assertTrue(studentCheckingRepository.existsById(studentChecking.getId()));
+        assertEquals(3, studentCheckingRepository.findAll().size());
     }
 
     @Test
     void update() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         StudentChecking studentChecking = new StudentChecking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(studentChecking);
@@ -146,7 +144,7 @@ class StudentCheckingControllerImplTest {
 
     @Test
     void updateBalance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         StudentChecking studentChecking = new StudentChecking(money3, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         String body = objectMapper.writeValueAsString(studentChecking);
 
@@ -160,7 +158,7 @@ class StudentCheckingControllerImplTest {
 
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(studentChecking1.getId());
         assertTrue(optionalStudentChecking.isPresent());
-        assertEquals(BigDecimal.valueOf(298000), optionalStudentChecking.get().getBalance().getBalance());
+        assertEquals(BigDecimal.valueOf(298000), optionalStudentChecking.get().getBalance().getAmount());
     }
 
     @Test

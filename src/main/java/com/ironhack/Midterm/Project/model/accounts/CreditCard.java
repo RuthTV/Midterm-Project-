@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Currency;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -18,7 +19,12 @@ public class CreditCard extends Account {
     private Date lastActualizedDate;
     @Max(value = 100000)
     @Min(value = 100)
-    private BigDecimal creditLimit;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "credit_limit_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "credit_limit_currency"))
+    })
+    private Money creditLimit;
     @Embedded
     private Money balance;
 
@@ -27,7 +33,7 @@ public class CreditCard extends Account {
 
     public CreditCard(Money balance, String secretKey, User primaryOwner, Date creationDate) {
         super(balance, secretKey, primaryOwner, creationDate);
-        this.creditLimit = BigDecimal.valueOf(100);
+        this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
         this.interestRate = BigDecimal.valueOf(0.2);
         this.lastActualizedDate = creationDate;
         setBalance(balance);
@@ -35,7 +41,7 @@ public class CreditCard extends Account {
 
     public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
         super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
-        this.creditLimit = BigDecimal.valueOf(100);
+        this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
         this.interestRate = BigDecimal.valueOf(0.2);
         this.lastActualizedDate = creationDate;
         setBalance(balance);
@@ -45,7 +51,7 @@ public class CreditCard extends Account {
         super(balance, secretKey, primaryOwner, creationDate);
         this.lastActualizedDate = creationDate;
         setInterestRate(interestRate);
-        this.creditLimit = BigDecimal.valueOf(100);
+        this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
         setBalance(balance);
     }
 
@@ -53,11 +59,11 @@ public class CreditCard extends Account {
         super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.lastActualizedDate = creationDate;
         setInterestRate(interestRate);
-        this.creditLimit = BigDecimal.valueOf(100);
+        this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
         setBalance(balance);
     }
 
-    public CreditCard(Money balance, String secretKey, User primaryOwner, Date creationDate, BigDecimal creditLimit) {
+    public CreditCard(Money balance, String secretKey, User primaryOwner, Date creationDate, Money creditLimit) {
         super(balance, secretKey, primaryOwner, creationDate);
         this.lastActualizedDate = creationDate;
         this.interestRate = BigDecimal.valueOf(0.2);
@@ -65,14 +71,14 @@ public class CreditCard extends Account {
         setBalance(balance);
     }
 
-    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, BigDecimal creditLimit) {
+    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate, Money creditLimit) {
         super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.lastActualizedDate = creationDate;
         this.interestRate = BigDecimal.valueOf(0.2);
         setCreditLimit(creditLimit);
         setBalance(balance);
     }
-    public CreditCard(Money balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate,  BigDecimal creditLimit) {
+    public CreditCard(Money balance, String secretKey, User primaryOwner, BigDecimal interestRate, Date creationDate,  Money creditLimit) {
         super(balance, secretKey, primaryOwner, creationDate);
         this.lastActualizedDate = creationDate;
         setInterestRate(interestRate);
@@ -80,7 +86,7 @@ public class CreditCard extends Account {
         setBalance(balance);
     }
 
-    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate, BigDecimal creditLimit) {
+    public CreditCard(Money balance, String secretKey, User primaryOwner, User secondayOwner, BigDecimal interestRate, Date creationDate, Money creditLimit) {
         super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
         this.lastActualizedDate = creationDate;
         setInterestRate(interestRate);
@@ -106,17 +112,17 @@ public class CreditCard extends Account {
         return "The interest rate has been set";
     }
 
-    public BigDecimal getCreditLimit() {
+    public Money getCreditLimit() {
         return creditLimit;
     }
 
-    public String setCreditLimit(BigDecimal creditLimit) {
-        if (creditLimit.compareTo(BigDecimal.valueOf(100)) == -1){
-            this.creditLimit = BigDecimal.valueOf(100);
+    public String setCreditLimit(Money creditLimit) {
+        if (creditLimit.getAmount().compareTo(BigDecimal.valueOf(100)) == -1){
+            this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
             return "The minimum value of credit limit is 100\n " +
                     "Your credit limit has been set at 100";
-        } else if (creditLimit.compareTo(BigDecimal.valueOf(100000)) == 1) {
-            this.creditLimit = BigDecimal.valueOf(100000);
+        } else if (creditLimit.getAmount().compareTo(BigDecimal.valueOf(100000)) == 1) {
+            this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
             return "The maximum value of credit limit is 100000\n" +
                     "Your credit limit has been set at 100000";
         }else {
@@ -151,9 +157,8 @@ public class CreditCard extends Account {
             lastDateActualizedLocal = lastDateActualizedLocal.plusMonths(1);
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal));
             BigDecimal interest = getInterestRate().divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-            money = new Money(balance.getBalance().add(interest.multiply(balance.getBalance()).setScale(2, RoundingMode.HALF_UP)));
+            money = new Money(balance.getAmount().add(interest.multiply(balance.getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
             setBalance(money);
         }
-
     }
 }

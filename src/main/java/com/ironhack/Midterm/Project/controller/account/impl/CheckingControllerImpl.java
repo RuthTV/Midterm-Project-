@@ -58,7 +58,7 @@ public class CheckingControllerImpl implements CheckingController {
     @PatchMapping("/checkings/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        checkingService.updateBalance(id, balance.getBalance());
+        checkingService.updateBalance(id, balance.getAmount());
     }
 
     @DeleteMapping("/checkings/{id}")

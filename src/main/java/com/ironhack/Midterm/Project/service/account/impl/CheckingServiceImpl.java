@@ -25,7 +25,7 @@ public class CheckingServiceImpl implements CheckingService {
 
     public void updateBalance(Long id, BigDecimal balance) {
         Checking checking = checkingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        checking.getBalance().setBalance(balance);
+        checking.getBalance().setAmount(balance);
         checkingRepository.save(checking);
     }
     public void delete(Long id) {

@@ -1,6 +1,5 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.Money;
@@ -17,16 +16,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.sql.Date;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +58,8 @@ class CheckingControllerImplTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Ambasaguas 55", 48891);
         admin = new Admin("Ruth Telleria", "cbmnchmhc");
-        money = new Money(BigDecimal.valueOf(2000000));
-        money2 = new Money(BigDecimal.valueOf(245000));
+        money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
+        money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
         accountHolder = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
         checking1 = new Checking(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
         checking2 = new Checking(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
@@ -84,8 +81,8 @@ class CheckingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fngmhg_fhª"));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
@@ -104,32 +101,30 @@ class CheckingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fzhgnhª"));
-        assertFalse(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
     void store() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         Checking checking = new Checking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(checking);
         MvcResult mvcResult = mockMvc.perform(
                         post("/checkings")
                                 .content(body)
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Lorena Pardo"));
-        assertTrue(checkingRepository.existsById(checking.getId()));
+        assertEquals(3, checkingRepository.findAll().size());
     }
 
     @Test
     void update() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         Checking checking = new Checking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(checking);
@@ -149,7 +144,7 @@ class CheckingControllerImplTest {
 
     @Test
     void updateBalance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Checking checking = new Checking(money3, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         String body = objectMapper.writeValueAsString(checking);
 
@@ -163,7 +158,7 @@ class CheckingControllerImplTest {
 
         Optional<Checking> optionalChecking = checkingRepository.findById(checking2.getId());
         assertTrue(optionalChecking.isPresent());
-        assertEquals(BigDecimal.valueOf(298000), optionalChecking.get().getBalance().getBalance());
+        assertEquals(BigDecimal.valueOf(298000), optionalChecking.get().getBalance().getAmount());
     }
 
     @Test

@@ -24,7 +24,7 @@ public class SavingServiceImpl implements SavingService {
 
     public void updateBalance(Long id, BigDecimal balance) {
         Saving saving = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        saving.getBalance().setBalance(balance);
+        saving.getBalance().setAmount(balance);
         savingRepository.save(saving);
     }
     public void delete(Long id) {

@@ -6,44 +6,58 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Currency;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Checking extends Account {
-    private BigDecimal monthlyMaintenanceFee;
-    private BigDecimal minimumBalance;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "monthly_maintenance_fee_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "monthly_maintenance_fee_currency"))
+    })
+    private Money monthlyMaintenanceFee;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
+    })
+    private Money minimumBalance;
     @Embedded
     private Money balance;
 
     @NotNull
     private Date lastActualizedDate;
+
+    public void setMonthlyMaintenanceFee(Money monthlyMaintenanceFee) {
+        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
+    }
+
     public Checking() {
     }
 
     public Checking(Money balance, String secretKey, User primaryOwner, Date creationDate) {
         super(balance, secretKey, primaryOwner, creationDate);
-        this.monthlyMaintenanceFee = BigDecimal.valueOf(12);
-        this.minimumBalance = BigDecimal.valueOf(250);
+        this.monthlyMaintenanceFee = new Money(BigDecimal.valueOf(12), Currency.getInstance("USD"));
+        this.minimumBalance =  new Money(BigDecimal.valueOf(250), Currency.getInstance("USD"));
         this.lastActualizedDate = creationDate;
         setBalance(balance);
     }
 
     public Checking(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
         super(balance, secretKey, primaryOwner, secondayOwner, creationDate);
-        this.monthlyMaintenanceFee = BigDecimal.valueOf(12);
-        this.minimumBalance = BigDecimal.valueOf(250);
+        this.monthlyMaintenanceFee = new Money(BigDecimal.valueOf(12), Currency.getInstance("USD"));
+        this.minimumBalance =  new Money(BigDecimal.valueOf(250), Currency.getInstance("USD"));
         this.lastActualizedDate = creationDate;
         setBalance(balance);
     }
 
-    public BigDecimal getMonthlyMaintenanceFee() {
+    public Money getMonthlyMaintenanceFee() {
         return monthlyMaintenanceFee;
     }
 
-    public BigDecimal getMinimumBalance() {
+    public Money getMinimumBalance() {
         return minimumBalance;
     }
 
@@ -55,8 +69,8 @@ public class Checking extends Account {
 
     public String setBalance(Money balance){
         this.balance = balance;
-        if(balance.getBalance().compareTo(minimumBalance) == -1) {
-            balance.setBalance(balance.getBalance().subtract(getPenaltyFee()));
+        if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
+            balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
         }else {
             this.balance = balance;
@@ -77,7 +91,7 @@ public class Checking extends Account {
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
         if(today.isAfter(lastDateActualizedLocal.plusMonths(1))){
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(1)));
-            Money money = new Money(getBalance().getBalance().subtract(monthlyMaintenanceFee));
+            Money money = new Money(getBalance().getAmount().subtract(monthlyMaintenanceFee.getAmount()), Currency.getInstance("USD"));
             setBalance(money);
         }
     }

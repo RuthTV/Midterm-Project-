@@ -1,18 +1,14 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.CreditCard;
 import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
-import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CreditCardRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
-import com.ironhack.Midterm.Project.service.account.interfaces.CheckingService;
 import com.ironhack.Midterm.Project.service.account.interfaces.CreditCardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +58,8 @@ class CreditCardControllerImplTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Ambasaguas 55", 48891);
         admin = new Admin("Ruth Telleria", "cbmnchmhc");
-        money = new Money(BigDecimal.valueOf(2000000));
-        money2 = new Money(BigDecimal.valueOf(245000));
+        money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
+        money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
         accountHolder = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
         creditCard = new CreditCard(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
         creditCard1 = new CreditCard(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
@@ -84,8 +81,8 @@ class CreditCardControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fngmhg_fhª"));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
     }
 
     @Test
@@ -104,12 +101,11 @@ class CreditCardControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fzhgnhª"));
-        assertFalse(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
     @Test
     void store() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         CreditCard creditCard2 = new CreditCard(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(creditCard2);
@@ -123,12 +119,12 @@ class CreditCardControllerImplTest {
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Lorena Pardo"));
-        assertTrue(creditCardRepository.existsById(creditCard2.getId()));
+        assertEquals(3, creditCardRepository.findAll().size());
     }
 
     @Test
     void update() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         CreditCard creditCard2 = new CreditCard(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(creditCard2);
@@ -148,7 +144,7 @@ class CreditCardControllerImplTest {
 
     @Test
     void updateBalance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         CreditCard creditCard2 = new CreditCard(money3, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         String body = objectMapper.writeValueAsString(creditCard2);
 
@@ -162,7 +158,7 @@ class CreditCardControllerImplTest {
 
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(creditCard1.getId());
         assertTrue(optionalCreditCard.isPresent());
-        assertEquals(BigDecimal.valueOf(298000), optionalCreditCard.get().getBalance().getBalance());
+        assertEquals(BigDecimal.valueOf(298000), optionalCreditCard.get().getBalance().getAmount());
     }
     @Test
     void delete_validId_CheckingRemoved() throws Exception {

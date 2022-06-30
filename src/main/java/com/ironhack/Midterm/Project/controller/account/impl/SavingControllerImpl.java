@@ -58,7 +58,7 @@ public class SavingControllerImpl implements SavingController {
     @PatchMapping("/savings/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        savingService.updateBalance(id, balance.getBalance());
+        savingService.updateBalance(id, balance.getAmount());
     }
 
     @DeleteMapping("/savings/{id}")

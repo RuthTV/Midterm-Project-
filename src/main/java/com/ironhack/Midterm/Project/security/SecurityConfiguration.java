@@ -15,13 +15,20 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic(); // Vamos a utilizar basic auth
-        http.csrf().disable(); // Desactivamos la protección CSRF porque nosotros no vamos a manejar el HTML
-        http.authorizeRequests() // Vamos a estacler la protección de cada endpoint individualmente
-                .antMatchers(HttpMethod.GET, "/hello-world", "/hello-user").authenticated() // solo usuarios autenticados
-                .antMatchers(HttpMethod.GET, "/hello/**").hasRole("ADMIN") // Solo ADMIN
-                .antMatchers(HttpMethod.POST, "/hello-post").hasAnyRole("TECHNICIAN") // Solo ADMIN y TECHNICIAN
-                .anyRequest().permitAll(); // El resto de los enpoints son públicos
+        http.httpBasic();
+        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/checkings/id/{id}", "/creditCards/id/{id}", "/savings/id/{id}", "/studentCheckings/id/{id}").authenticated()
+                .antMatchers(HttpMethod.GET, "/accountHolders/{id}", "/admins/{id}", "/thirdPartys/{id}").authenticated()
+                .antMatchers(HttpMethod.GET, "/checkings/id/{id}", "/creditCards/id/{id}", "/savings/id/{id}", "/studentCheckings/id/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/accountHolders/{id}", "/admins/{id}", "/thirdPartys/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/checkings", "/creditCards", "/savings", "/studentCheckings").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/accountHolders", "/admins", "/thirdPartys").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/checkings/{id}/balance", "/creditCards/{id}/balance", "/studentCheckings/{id}/balance", "/savings/{id}/balance").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/checkings", "/creditCards", "/savings", "/studentCheckings").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/thirdPartys").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/checkings/{id}", "/creditCards/{id}", "/savings/{id}", "/studentCheckings/{id}").hasRole("ADMIN")
+                .anyRequest().permitAll();
         return http.build();
     }
 

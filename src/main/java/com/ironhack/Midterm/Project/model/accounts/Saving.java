@@ -5,11 +5,11 @@ import com.ironhack.Midterm.Project.model.users.User;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Currency;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -18,9 +18,14 @@ public class Saving extends Account {
     @DecimalMin(value = "0.0025")
     private BigDecimal interestRate;
     private Date lastActualizedDate;
-    private BigDecimal minimumBalance = BigDecimal.valueOf(1000);
     @Embedded
-   // @DecimalMin(value = "100.00", message = "balance can not be lower than 100")
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
+    })
+    private Money minimumBalance = new Money(BigDecimal.valueOf(1000), Currency.getInstance("USD"));
+    @Embedded
+ //   @DecimalMin(value = "100.00", message = "balance can not be lower than 100")
     private Money balance;
 
     public Saving() {
@@ -79,8 +84,8 @@ public class Saving extends Account {
 
     public String setBalance(Money balance){
         this.balance = balance;
-        if(balance.getBalance().compareTo(minimumBalance) == -1) {
-            balance.setBalance(balance.getBalance().subtract(getPenaltyFee()));
+        if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
+            balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
         }else {
             this.balance = balance;
@@ -101,14 +106,17 @@ public class Saving extends Account {
     }
 
     public void balanceActualized(Date lastActualizedDate){
-        Money money;
+        Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
-        if(today.isAfter(lastDateActualizedLocal.plusYears(1))){
-            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusYears(1)));
-            BigDecimal interest = balance.getBalance().multiply(getInterestRate()).setScale(2, RoundingMode.HALF_UP);
-            money = new Money(balance.getBalance().add(interest));
-            setBalance(money);
+        LocalDate lastDateActualizedLocalPlusMonth = lastDateActualizedLocal.plusYears(1);
+        if (today.isAfter(lastDateActualizedLocalPlusMonth)){
+            lastDateActualizedLocal = lastDateActualizedLocal.plusYears(1);
+            BigDecimal interest = balance.getAmount().multiply(getInterestRate()).setScale(2, RoundingMode.HALF_UP);
+            money = new Money(balance.getAmount().add(interest), Currency.getInstance("USD"));
+
         }
+        setLastActualizedDate(Date.valueOf(lastDateActualizedLocal));
+        setBalance(money);
     }
 }

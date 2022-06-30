@@ -24,7 +24,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     public void updateBalance(Long id, BigDecimal balance) {
         CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        creditCard.getBalance().setBalance(balance);
+        creditCard.getBalance().setAmount(balance);
         creditCardRepository.save(creditCard);
     }
     public void delete(Long id) {

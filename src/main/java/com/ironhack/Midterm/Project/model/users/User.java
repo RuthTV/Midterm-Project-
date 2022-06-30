@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.users;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ironhack.Midterm.Project.model.accounts.Account;
 import com.ironhack.Midterm.Project.model.role.Role;
 
@@ -21,8 +22,10 @@ public abstract class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles;
     @OneToMany(mappedBy = "primaryOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<Account> accounts;
     @OneToMany(mappedBy = "secondayOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<Account> secondaryAccounts;
 
     public User() {

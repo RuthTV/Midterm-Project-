@@ -39,6 +39,10 @@ public class AccountHolder extends User{
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
+    public void setRole(Set<Role> roles){
+        Role user = new Role("User");
+        roles.add(user);
+    }
 
     public Date getDateOfBirth() {
         return dateOfBirth;

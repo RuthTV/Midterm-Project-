@@ -23,7 +23,7 @@ public class StudentCheckingServiceImpl implements StudentCheckingService {
 
     public void updateBalance(Long id, BigDecimal balance) {
         StudentChecking studentChecking = studentCheckingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        studentChecking.getBalance().setBalance(balance);
+        studentChecking.getBalance().setAmount(balance);
         studentCheckingRepository.save(studentChecking);
     }
     public void delete(Long id) {

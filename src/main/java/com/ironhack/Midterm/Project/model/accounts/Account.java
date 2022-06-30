@@ -1,16 +1,16 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ironhack.Midterm.Project.enums.Status;
 import com.ironhack.Midterm.Project.model.users.User;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Currency;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,11 +27,19 @@ public abstract class Account {
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
     @NotNull(message = "There must be a owner")
+    @JsonBackReference
     private User primaryOwner;
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
+    @JsonBackReference
     private User secondayOwner;
-    private BigDecimal penaltyFee;
+    @Embedded
+    @NotNull(message = "Balance can no be null")
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "penaltyFee_amount")),
+            @AttributeOverride(name = "currency", column = @Column(name = "penaltyFee_currency"))
+    })
+    private Money penaltyFee;
     private Date creationDate;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -45,7 +53,7 @@ public abstract class Account {
         this.primaryOwner = primaryOwner;
         this.creationDate = creationDate;
         this.status = Status.ACTIVE;
-        this.penaltyFee = BigDecimal.valueOf(40);
+        this.penaltyFee = new Money(BigDecimal.valueOf(40), Currency.getInstance("USD"));
     }
 
     public Account(Money balance, String secretKey, User primaryOwner, User secondayOwner, Date creationDate) {
@@ -55,7 +63,7 @@ public abstract class Account {
         this.secondayOwner = secondayOwner;
         this.creationDate = creationDate;
         this.status = Status.ACTIVE;
-        this.penaltyFee = BigDecimal.valueOf(40);
+        this.penaltyFee = new Money(BigDecimal.valueOf(40), Currency.getInstance("USD"));
     }
 
     public Long getId() {
@@ -99,7 +107,7 @@ public abstract class Account {
         this.secondayOwner = secondayOwner;
     }
 
-    public BigDecimal getPenaltyFee() {
+    public Money getPenaltyFee() {
         return penaltyFee;
     }
 

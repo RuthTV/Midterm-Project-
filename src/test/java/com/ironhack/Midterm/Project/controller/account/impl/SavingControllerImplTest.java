@@ -1,18 +1,14 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
-import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
 import com.ironhack.Midterm.Project.repositories.accountRepository.SavingRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
-import com.ironhack.Midterm.Project.service.account.interfaces.CheckingService;
 import com.ironhack.Midterm.Project.service.account.interfaces.SavingService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,14 +57,14 @@ class SavingControllerImplTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Ambasaguas 55", 48891);
         admin = new Admin("Ruth Telleria", "cbmnchmhc");
-        money = new Money(BigDecimal.valueOf(2000000));
-        money2 = new Money(BigDecimal.valueOf(245000));
+        money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
+        money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
         accountHolder = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
         saving = new Saving(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
         saving2 = new Saving(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         adminRepository.save(admin);
         accountHolderRepository.save(accountHolder);
-        savingRepository.saveAll(List.of(saving, saving));
+        savingRepository.saveAll(List.of(saving, saving2));
     }
 
     @AfterEach
@@ -83,8 +80,8 @@ class SavingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fngmhg_fhª"));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
@@ -102,13 +99,13 @@ class SavingControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("fzhgnhª"));
-        assertFalse(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("245000"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
     void store() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         Saving saving3 = new Saving(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(saving3);
@@ -122,11 +119,11 @@ class SavingControllerImplTest {
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Lorena Pardo"));
-        assertTrue(savingRepository.existsById(saving3.getId()));
+        assertEquals(3, savingRepository.findAll().size());
     }
     @Test
     void update() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
         Saving saving3 = new Saving(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(saving3);
@@ -146,7 +143,7 @@ class SavingControllerImplTest {
 
     @Test
     void updateBalance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000));
+        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Saving saving3 = new Saving(money3, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         String body = objectMapper.writeValueAsString(saving3);
 
@@ -160,7 +157,7 @@ class SavingControllerImplTest {
 
         Optional<Saving> optionalSaving = savingRepository.findById(saving2.getId());
         assertTrue(optionalSaving.isPresent());
-        assertEquals(BigDecimal.valueOf(298000), optionalSaving.get().getBalance().getBalance());
+        assertEquals(BigDecimal.valueOf(298000), optionalSaving.get().getBalance().getAmount());
     }
 
     @Test
