@@ -6,6 +6,9 @@ import com.ironhack.Midterm.Project.model.users.User;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -16,11 +19,14 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
+    @NotNull(message = "Balance can no be null")
     private Money balance;
+    @NotNull(message = "Key can no be null")
     private String secretKey;
 
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
+    @NotNull(message = "There must be a owner")
     private User primaryOwner;
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
@@ -50,6 +56,14 @@ public abstract class Account {
         this.creationDate = creationDate;
         this.status = Status.ACTIVE;
         this.penaltyFee = BigDecimal.valueOf(40);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Money getBalance() {

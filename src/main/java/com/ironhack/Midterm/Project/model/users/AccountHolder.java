@@ -1,13 +1,17 @@
 package com.ironhack.Midterm.Project.model.users;
 
 import com.ironhack.Midterm.Project.model.address.Address;
+import com.ironhack.Midterm.Project.model.role.Role;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class AccountHolder extends User{
+
     @Column(name = "date_birth")
     private Date dateOfBirth;
     @Embedded
@@ -18,6 +22,7 @@ public class AccountHolder extends User{
             @AttributeOverride(name = "postCode", column = @Column(name = "mailing_postal_code"))
     })
     private Address mailingAddress;
+    private Set<Role> roles;
 
     public AccountHolder() {
     }

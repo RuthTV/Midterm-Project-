@@ -1,4 +1,4 @@
-package com.ironhack.Midterm.Project.repositories;
+package com.ironhack.Midterm.Project.repositories.userRepository;
 
 import com.ironhack.Midterm.Project.model.users.ThirdParty;
 import org.springframework.data.jpa.repository.JpaRepository;

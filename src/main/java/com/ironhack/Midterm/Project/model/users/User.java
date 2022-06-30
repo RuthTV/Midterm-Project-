@@ -33,11 +33,11 @@ public abstract class User {
         this.password = password;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,6 +63,23 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Set<Account> getSecondaryAccounts() {
+        return secondaryAccounts;
+    }
+
+    public void setSecondaryAccounts(Set<Account> secondaryAccounts) {
+        this.secondaryAccounts = secondaryAccounts;
     }
 
     @Override

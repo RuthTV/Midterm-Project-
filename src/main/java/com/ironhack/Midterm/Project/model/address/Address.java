@@ -1,3 +1,4 @@
+
 package com.ironhack.Midterm.Project.model.address;
 
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
@@ -10,28 +11,26 @@ public class Address {
     private int postCode;
 
     public Address() {
-    }
+        }
+        public Address(String street, int postCode) {
+            this.street = street;
+            this.postCode = postCode;
+        }
 
-    public Address(String street, int postCode) {
-        this.street = street;
-        this.postCode = postCode;
-    }
 
+        public String getStreet() {
+            return street;
+        }
 
-    public String getStreet() {
-        return street;
-    }
+        public void setStreet(String street) {
+            this.street = street;
+        }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public int getPostCode() {
-        return postCode;
-    }
-
-    public void setPostCode(int postCode) {
-        this.postCode = postCode;
-    }
+        public int getPostCode() {
+            return postCode;
+        }
+        public void setPostCode(int postCode) {
+            this.postCode = postCode;
+        }
 
 }
