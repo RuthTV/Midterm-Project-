@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.StudentCheckingController;
 import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
@@ -57,8 +58,8 @@ public class StudentCheckingControllerImpl implements StudentCheckingController 
 
     @PatchMapping("/studentCheckings/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        studentCheckingService.updateBalance(id, balance.getAmount());
+    public void updateBalance(@PathVariable Long id, @RequestBody @Valid MoneyDTO balance) {
+        studentCheckingService.updateBalance(id, balance.getBalance());
     }
 
     @DeleteMapping("/studentCheckings/{id}")

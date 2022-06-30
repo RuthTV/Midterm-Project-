@@ -1,5 +1,7 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
+import com.ironhack.Midterm.Project.controller.account.dto.CreditCardDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.CreditCardController;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.CreditCard;
@@ -45,7 +47,8 @@ public class CreditCardControllerImpl implements CreditCardController {
 
     @PostMapping("/creditCards")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreditCard store(@RequestBody @Valid CreditCard creditCard) {
+    public CreditCard store(@RequestBody @Valid CreditCardDTO creditCardDto) {
+        CreditCard creditCard = store(creditCardDto);
         return creditCardRepository.save(creditCard);
     }
 
@@ -57,8 +60,8 @@ public class CreditCardControllerImpl implements CreditCardController {
 
     @PatchMapping("/creditCards/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        creditCardService.updateBalance(id, balance.getAmount());
+    public void updateBalance(@PathVariable Long id, @RequestBody @Valid MoneyDTO balance) {
+        creditCardService.updateBalance(id, balance.getBalance());
     }
 
     @DeleteMapping("/creditCards/{id}")

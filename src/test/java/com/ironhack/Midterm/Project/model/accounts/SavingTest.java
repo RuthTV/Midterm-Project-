@@ -61,7 +61,7 @@ class SavingTest {
 
     @Test
     void setBalance_GoodBalance_Balance() {
-        assertEquals(BigDecimal.valueOf(2000000), saving.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(2000000).setScale(2), saving.getBalance().getAmount());
         saving.getBalance().setAmount(BigDecimal.valueOf(1244657));
         assertEquals("The balance has been set", saving.setBalance(saving.getBalance()));
     }
@@ -69,14 +69,14 @@ class SavingTest {
     void setBalance_Balance_Penalty() {
         saving.getBalance().setAmount(BigDecimal.valueOf(950));
         assertEquals("A penalty has been taken from the balance", saving.setBalance(saving.getBalance()));
-        assertEquals(BigDecimal.valueOf(910), saving.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(910).setScale(2), saving.getBalance().getAmount());
     }
 
     @Test
     void getBalance_LastActualizedDateLess1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
         Saving saving3 = new Saving(money3, "fngmhg_fhª", user1, Date.valueOf("2022-06-23"));
-        assertEquals(BigDecimal.valueOf(19000), saving3.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(19000).setScale(2), saving3.getBalance().getAmount());
     }
     @Test
     void getBalance_LastActualizedDateMore1month(){

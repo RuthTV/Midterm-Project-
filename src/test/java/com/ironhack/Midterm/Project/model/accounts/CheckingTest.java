@@ -62,7 +62,7 @@ class CheckingTest {
 
     @Test
     void setBalance_GoodBalance_Balance() {
-        assertEquals(BigDecimal.valueOf(2000000), checking.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(2000000).setScale(2), checking.getBalance().getAmount());
         checking.getBalance().setAmount(BigDecimal.valueOf(1244657));
         assertEquals("The balance has been set", checking.setBalance(checking.getBalance()));
     }
@@ -70,20 +70,20 @@ class CheckingTest {
     void setBalance_Balance_Penalty() {
         checking.getBalance().setAmount(BigDecimal.valueOf(150));
         assertEquals("A penalty has been taken from the balance", checking.setBalance(checking.getBalance()));
-        assertEquals(BigDecimal.valueOf(110), checking.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(110).setScale(2), checking.getBalance().getAmount());
     }
 
     @Test
     void getBalance_LastActualizedDateLess1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
         Checking checking3 = new Checking(money3, "fngmhg_fhª", user1, Date.valueOf("2022-06-23"));
-        assertEquals(BigDecimal.valueOf(19000), checking3.getBalance().getAmount());
+        assertEquals(BigDecimal.valueOf(19000).setScale(2), checking3.getBalance().getAmount());
     }
     @Test
     void getBalance_LastActualizedDateMore1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
         Checking checking5 = new Checking(money3, "fngmhg_fhª", user1, Date.valueOf("2022-05-03"));
-        assertEquals(BigDecimal.valueOf(18988), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
+        assertEquals(BigDecimal.valueOf(18988).setScale(2), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
         assertEquals(Date.valueOf("2022-06-03"), checking5.getLastActualizedDate());
     }
 }

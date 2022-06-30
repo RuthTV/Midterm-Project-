@@ -1,5 +1,7 @@
 package com.ironhack.Midterm.Project.controller.account.interfaces;
 
+import com.ironhack.Midterm.Project.controller.account.dto.CheckingDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.users.User;
@@ -11,9 +13,9 @@ public interface CheckingController {
     List<Checking> findAll();
     Checking findById(Long id);
     Checking findByUser(User user);
-    Checking store(Checking checking);
+    Checking store(CheckingDTO checkingDto);
     void update(Long id, Checking checking);
-    void updateBalance(Long id, Money balance);
+    void updateBalance(Long id, MoneyDTO balance);
     void delete(Long id);
 
 }

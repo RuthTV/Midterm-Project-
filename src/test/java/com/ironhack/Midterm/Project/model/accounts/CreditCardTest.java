@@ -78,18 +78,18 @@ class CreditCardTest {
     @Test
     void setCreditLimit_CreditLimit_SameValue() {
         creditCard1.setCreditLimit(new Money(BigDecimal.valueOf(1030), Currency.getInstance("USD")));
-        assertEquals(BigDecimal.valueOf(1030), creditCard1.getCreditLimit());
+        assertEquals(BigDecimal.valueOf(1030).setScale(2), creditCard1.getCreditLimit().getAmount());
         assertEquals("The credit limit has been set", creditCard1.setCreditLimit(new Money(BigDecimal.valueOf(1030), Currency.getInstance("USD"))));
     }
 
     @Test
     void setCreditLimit_CreditLimit_DefaultValue() {
         assertEquals("The maximum value of credit limit is 100000\n" +
-                "Your credit limit has been set at 100000", creditCard.setCreditLimit(new Money(BigDecimal.valueOf(10000000), Currency.getInstance("USD"))));
+                "Your credit limit has been set at 100000", creditCard.setCreditLimit(new Money(BigDecimal.valueOf(100000000), Currency.getInstance("USD"))));
         assertEquals("The minimum value of credit limit is 100\n " +
                 "Your credit limit has been set at 100", creditCard1.setCreditLimit(new Money(BigDecimal.valueOf(-45), Currency.getInstance("USD"))));
-        assertEquals(BigDecimal.valueOf(100000), creditCard.getCreditLimit());
-        assertEquals(BigDecimal.valueOf(100), creditCard1.getCreditLimit());
+        assertEquals(BigDecimal.valueOf(100000).setScale(2), creditCard.getCreditLimit().getAmount());
+        assertEquals(BigDecimal.valueOf(100).setScale(2), creditCard1.getCreditLimit().getAmount());
     }
     @Test
     void getBalance_LastActualizedDateMore1month(){

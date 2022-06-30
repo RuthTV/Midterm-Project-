@@ -2,25 +2,27 @@ package com.ironhack.Midterm.Project.controller.account.dto;
 
 import com.ironhack.Midterm.Project.model.accounts.Money;
 
+import java.math.BigDecimal;
+
 public class Transference {
-    private Money money;
+    private BigDecimal money;
     private Long accountId1;
     private Long accountId2;
 
     public Transference() {
     }
 
-    public Transference(Money money, Long accountId1, Long accountId2) {
+    public Transference(BigDecimal money, Long accountId1, Long accountId2) {
         this.money = money;
         this.accountId1 = accountId1;
         this.accountId2 = accountId2;
     }
 
-    public Money getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
-    public void setMoney(Money money) {
+    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 

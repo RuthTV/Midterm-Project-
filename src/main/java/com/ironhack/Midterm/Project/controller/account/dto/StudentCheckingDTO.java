@@ -1,2 +1,32 @@
-package com.ironhack.Midterm.Project.controller.account.dto;public class StudentCheckingDTO {
+package com.ironhack.Midterm.Project.controller.account.dto;
+
+import com.ironhack.Midterm.Project.enums.Status;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+
+public class StudentCheckingDTO {
+
+    private BigDecimal money;
+    private String secretKey;
+    private Long primaryUserId1;
+    private Long secundaryUserId2;
+    private Date creationDate;
+    public StudentCheckingDTO() {
+    }
+
+    public StudentCheckingDTO(BigDecimal money, String secretKey, Long primaryUserId1, Date creationDate) {
+        this.money = money;
+        this.secretKey = secretKey;
+        this.primaryUserId1 = primaryUserId1;
+        this.creationDate = creationDate;
+    }
+
+    public StudentCheckingDTO(BigDecimal money, String secretKey, Long primaryUserId1, Long secundaryUserId2, Date creationDate) {
+        this.money = money;
+        this.secretKey = secretKey;
+        this.primaryUserId1 = primaryUserId1;
+        this.secundaryUserId2 = secundaryUserId2;
+        this.creationDate = creationDate;
+    }
 }

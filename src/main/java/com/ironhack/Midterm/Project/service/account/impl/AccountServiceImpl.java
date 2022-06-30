@@ -20,9 +20,9 @@ public class AccountServiceImpl implements AccountService {
     public void transferBalance(Transference transference) {
         Account account1 = accountRepository.findById(transference.getAccountId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
         Account account2 = accountRepository.findById(transference.getAccountId2()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        account1.getBalance().setAmount((account1.getBalance().getAmount().subtract(transference.getMoney().getAmount())));
+        account1.getBalance().setAmount((account1.getBalance().getAmount().subtract(transference.getMoney())));
         accountRepository.save(account1);
-        account2.getBalance().setAmount(account2.getBalance().getAmount().add(transference.getMoney().getAmount()));
+        account2.getBalance().setAmount(account2.getBalance().getAmount().add(transference.getMoney()));
         accountRepository.save(account2);
     }
 }

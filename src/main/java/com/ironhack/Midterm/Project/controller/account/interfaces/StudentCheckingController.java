@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.controller.account.interfaces;
 
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
@@ -13,6 +14,6 @@ public interface StudentCheckingController {
    // StudentChecking findByUser(User user);
     StudentChecking store(StudentChecking studentChecking);
     void update(Long id, StudentChecking studentChecking);
-    void updateBalance(Long id, Money balance);
+    void updateBalance(Long id, MoneyDTO balance);
     void delete(Long id);
 }

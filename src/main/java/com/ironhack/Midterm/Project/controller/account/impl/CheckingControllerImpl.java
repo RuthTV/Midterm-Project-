@@ -1,5 +1,7 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
+import com.ironhack.Midterm.Project.controller.account.dto.CheckingDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.CheckingController;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.Money;
@@ -45,7 +47,8 @@ public class CheckingControllerImpl implements CheckingController {
 
     @PostMapping("/checkings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Checking store(@RequestBody @Valid Checking checking) {
+    public Checking store(@RequestBody @Valid CheckingDTO checkingDto) {
+        Checking checking = store(checkingDto);
         return checkingRepository.save(checking);
     }
 
@@ -57,8 +60,8 @@ public class CheckingControllerImpl implements CheckingController {
 
     @PatchMapping("/checkings/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBalance(@PathVariable Long id, @RequestBody @Valid Money balance) {
-        checkingService.updateBalance(id, balance.getAmount());
+    public void updateBalance(@PathVariable Long id, @RequestBody @Valid MoneyDTO balance) {
+        checkingService.updateBalance(id, balance.getBalance());
     }
 
     @DeleteMapping("/checkings/{id}")

@@ -17,8 +17,8 @@ public class CreditCard extends Account {
     @DecimalMin(value = "0.1")
     private BigDecimal interestRate;
     private Date lastActualizedDate;
-    @Max(value = 100000)
-    @Min(value = 100)
+//    @Max(value = 100000)
+//    @Min(value = 100)
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "credit_limit_amount")),
@@ -122,7 +122,7 @@ public class CreditCard extends Account {
             return "The minimum value of credit limit is 100\n " +
                     "Your credit limit has been set at 100";
         } else if (creditLimit.getAmount().compareTo(BigDecimal.valueOf(100000)) == 1) {
-            this.creditLimit = new Money(BigDecimal.valueOf(100), Currency.getInstance("USD"));
+            this.creditLimit = new Money(BigDecimal.valueOf(100000), Currency.getInstance("USD"));
             return "The maximum value of credit limit is 100000\n" +
                     "Your credit limit has been set at 100000";
         }else {

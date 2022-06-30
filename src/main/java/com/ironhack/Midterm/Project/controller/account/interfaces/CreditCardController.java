@@ -1,5 +1,7 @@
 package com.ironhack.Midterm.Project.controller.account.interfaces;
 
+import com.ironhack.Midterm.Project.controller.account.dto.CreditCardDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.CreditCard;
 import com.ironhack.Midterm.Project.model.accounts.Money;
@@ -10,9 +12,9 @@ import java.util.List;
 public interface CreditCardController {
     List<CreditCard> findAll();
     CreditCard findById(Long id);
- //   CreditCard findByUser(User user);
-    CreditCard store(CreditCard creditCard);
+    CreditCard findByUser(User user);
+    CreditCard store(CreditCardDTO creditCardDto);
     void update(Long id, CreditCard creditCard);
-    void updateBalance(Long id, Money balance);
+    void updateBalance(Long id, MoneyDTO balance);
     void delete(Long id);
 }

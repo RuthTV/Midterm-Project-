@@ -18,11 +18,6 @@ public class AccountControllerImpl implements AccountController {
     @Autowired
     AccountService accountService;
 
-//    @PatchMapping("/accounts/{id1}/accounts/{id2}/balance/{balance}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void transferBalance(@PathVariable Long id1, @PathVariable Long id2, @RequestBody @Valid Money balance) {
-//        accountService.transferBalance(id1, id2, balance.getBalance());
-//    }
     @PutMapping("/transference")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void transferBalance(@RequestBody @Valid Transference transference) {
