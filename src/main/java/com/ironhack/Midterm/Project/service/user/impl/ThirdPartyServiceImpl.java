@@ -1,6 +1,5 @@
 package com.ironhack.Midterm.Project.service.user.impl;
 
-import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.model.users.ThirdParty;
 import com.ironhack.Midterm.Project.repositories.userRepository.ThirdPartyRepository;
 import com.ironhack.Midterm.Project.service.user.interfaces.ThirdPartyService;

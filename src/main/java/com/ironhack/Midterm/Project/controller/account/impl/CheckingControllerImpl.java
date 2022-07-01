@@ -4,7 +4,6 @@ import com.ironhack.Midterm.Project.controller.account.dto.CheckingDTO;
 import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.CheckingController;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
-import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
 import com.ironhack.Midterm.Project.service.account.interfaces.CheckingService;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 

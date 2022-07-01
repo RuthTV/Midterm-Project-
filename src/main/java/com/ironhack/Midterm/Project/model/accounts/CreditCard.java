@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
 @Entity
@@ -141,7 +143,7 @@ public class CreditCard extends Account {
 
     public Money getBalance(Date lastActualizedDate) {
         balanceActualized(lastActualizedDate);
-        return balance;
+        return this.balance;
     }
 
     public String setBalance(Money balance) {
@@ -150,15 +152,16 @@ public class CreditCard extends Account {
     }
 
     public void balanceActualized(Date lastActualizedDate){
-        Money money;
+        Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
         if(today.isAfter(lastDateActualizedLocal.plusMonths(1))){
-            lastDateActualizedLocal = lastDateActualizedLocal.plusMonths(1);
-            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal));
+            long diffTodayLastActualized = ChronoUnit.MONTHS.between(lastDateActualizedLocal, today);
+            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(diffTodayLastActualized)));
             BigDecimal interest = getInterestRate().divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-            money = new Money(balance.getAmount().add(interest.multiply(balance.getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
-            setBalance(money);
+            BigDecimal realInterest = interest.multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale( 2, RoundingMode.HALF_UP);
+            money = new Money(balance.getAmount().add(realInterest.multiply(balance.getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
         }
+        setBalance(money);
     }
 }

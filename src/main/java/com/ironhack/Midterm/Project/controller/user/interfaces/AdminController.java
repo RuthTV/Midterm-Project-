@@ -1,6 +1,5 @@
 package com.ironhack.Midterm.Project.controller.user.interfaces;
 
-import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
 
 import java.util.List;

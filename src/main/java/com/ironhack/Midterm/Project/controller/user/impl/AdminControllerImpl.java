@@ -1,7 +1,6 @@
 package com.ironhack.Midterm.Project.controller.user.impl;
 
 import com.ironhack.Midterm.Project.controller.user.interfaces.AdminController;
-import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
 import com.ironhack.Midterm.Project.service.user.interfaces.AdminService;

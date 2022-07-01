@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import javax.persistence.*;

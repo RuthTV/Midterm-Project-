@@ -1,9 +1,8 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.SavingDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.SavingController;
-import com.ironhack.Midterm.Project.model.accounts.CreditCard;
-import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.users.User;
 import com.ironhack.Midterm.Project.repositories.accountRepository.SavingRepository;
@@ -46,7 +45,8 @@ public class SavingControllerImpl implements SavingController {
 
     @PostMapping("/savings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Saving store(@RequestBody @Valid Saving saving) {
+    public Saving store(@RequestBody @Valid SavingDTO savingDto) {
+        Saving saving =  store(savingDto);
         return savingRepository.save(saving);
     }
 

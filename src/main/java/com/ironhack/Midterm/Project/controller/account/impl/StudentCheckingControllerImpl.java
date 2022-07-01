@@ -1,9 +1,8 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.StudentCheckingDTO;
 import com.ironhack.Midterm.Project.controller.account.interfaces.StudentCheckingController;
-import com.ironhack.Midterm.Project.model.accounts.Money;
-import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.users.User;
 import com.ironhack.Midterm.Project.repositories.accountRepository.StudentCheckingRepository;
@@ -46,7 +45,8 @@ public class StudentCheckingControllerImpl implements StudentCheckingController 
 
     @PostMapping("/studentCheckings")
     @ResponseStatus(HttpStatus.CREATED)
-    public StudentChecking store(@RequestBody @Valid StudentChecking studentChecking) {
+    public StudentChecking store(@RequestBody @Valid StudentCheckingDTO studentCheckingDto) {
+        StudentChecking studentChecking = store(studentCheckingDto);
         return studentCheckingRepository.save(studentChecking);
     }
 

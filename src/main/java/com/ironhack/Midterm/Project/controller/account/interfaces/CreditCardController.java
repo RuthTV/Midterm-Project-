@@ -2,9 +2,7 @@ package com.ironhack.Midterm.Project.controller.account.interfaces;
 
 import com.ironhack.Midterm.Project.controller.account.dto.CreditCardDTO;
 import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
-import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.CreditCard;
-import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import java.util.List;

@@ -13,11 +13,7 @@ public class Admin extends User{
 
     public Admin(String username, String password) {
         super(username, password);
-    }
-    public void setRole(Set<Role> roles){
-        Role user = new Role("USER");
-        Role admin = new Role("ADMIN");
-        roles.add(user);
+        setRoles(Set.of(new Role ("ADMIN")));
     }
 
 }

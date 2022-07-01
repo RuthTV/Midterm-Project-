@@ -1,14 +1,12 @@
 package com.ironhack.Midterm.Project.controller.user.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.model.users.ThirdParty;
 import com.ironhack.Midterm.Project.repositories.userRepository.ThirdPartyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;

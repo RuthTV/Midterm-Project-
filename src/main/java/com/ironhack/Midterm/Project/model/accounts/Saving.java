@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
 @Entity
@@ -111,12 +113,12 @@ public class Saving extends Account {
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
         LocalDate lastDateActualizedLocalPlusMonth = lastDateActualizedLocal.plusYears(1);
         if (today.isAfter(lastDateActualizedLocalPlusMonth)){
-            lastDateActualizedLocal = lastDateActualizedLocal.plusYears(1);
-            BigDecimal interest = balance.getAmount().multiply(getInterestRate()).setScale(2, RoundingMode.HALF_UP);
+            long diffTodayLastActualized = ChronoUnit.YEARS.between(lastDateActualizedLocal, today);
+            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusYears(diffTodayLastActualized)));
+            BigDecimal interest = balance.getAmount().multiply(getInterestRate()).multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale(2, RoundingMode.HALF_UP);
             money = new Money(balance.getAmount().add(interest), Currency.getInstance("USD"));
 
         }
-        setLastActualizedDate(Date.valueOf(lastDateActualizedLocal));
         setBalance(money);
     }
 }

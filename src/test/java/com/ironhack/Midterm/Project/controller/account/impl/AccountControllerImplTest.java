@@ -1,8 +1,9 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.Midterm.Project.controller.account.dto.Transference;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
@@ -72,15 +73,11 @@ class AccountControllerImplTest {
 
     @Test
     void transferBalance_Balance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(500), Currency.getInstance("USD"));
-        BigDecimal bigDecimal1 = money.getAmount().subtract(money3.getAmount());
-        Money money4 = new Money(bigDecimal1, Currency.getInstance("USD"));
-        BigDecimal bigDecimal2 = money2.getAmount().subtract(money3.getAmount());
-        Money money5 = new Money(bigDecimal2, Currency.getInstance("USD"));
-        Checking checking2 = new Checking(money4, "fngmhg_fhª", accountHolder1, Date.valueOf("2018-01-23"));
-        StudentChecking studentChecking2 = new StudentChecking(money5, "fzhgnhª", accountHolder2, Date.valueOf("2016-12-23"));
+        BigDecimal money3 = BigDecimal.valueOf(500);
+        BigDecimal bigDecimal2 = money2.getAmount().add(money3);
+        Transference transference = new Transference(money3, checking.getPrimaryOwner().getUsername(), studentChecking.getId());
 
-        String body = objectMapper.writeValueAsString(List.of(checking2, studentChecking2));
+        String body = objectMapper.writeValueAsString(List.of(transference));
         MvcResult mvcResult = mockMvc.perform(
                         put("/transference")
                                 .content(body)

@@ -1,9 +1,8 @@
 package com.ironhack.Midterm.Project.service.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.CreditCardDTO;
-import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.accounts.CreditCard;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CreditCardRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
@@ -28,8 +27,8 @@ public class CreditCardServiceImpl implements CreditCardService {
     public CreditCard store(CreditCardDTO creditCardDto){
         AccountHolder primaryUser = accountHolderRepository.findById(creditCardDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
         Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(creditCardDto.getSecundaryUserId2());
-        CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(), primaryUser, secundaryUser.get(), creditCardDto.getInterestRate(),
-                creditCardDto.getCreationDate(), new Money(creditCardDto.getCreditLimit(), Currency.getInstance("USD")));
+        CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(), primaryUser, secundaryUser.get(),
+                creditCardDto.getInterestRate(), creditCardDto.getCreationDate(), new Money(creditCardDto.getCreditLimit(), Currency.getInstance("USD")));
         return creditCard;
     }
 

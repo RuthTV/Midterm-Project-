@@ -2,9 +2,8 @@ package com.ironhack.Midterm.Project.service.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.CheckingDTO;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
-import com.ironhack.Midterm.Project.model.users.User;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.service.account.interfaces.CheckingService;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -27,6 +27,11 @@ public class CheckingServiceImpl implements CheckingService {
 
     public Checking store(CheckingDTO checkingDto){
         AccountHolder primaryUser = accountHolderRepository.findById(checkingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        LocalDate today24YearsBefore = LocalDate.now().minusYears(24);
+        if(primaryUser.getDateOfBirth().toLocalDate().isBefore(today24YearsBefore)){
+            throw new IllegalArgumentException("The primary owner of the Checking must be at least 24 old\n" +
+                                                "Please create a Student Checking");
+        }
         Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(checkingDto.getSecundaryUserId2());
         Checking checking = new Checking(new Money(checkingDto.getMoney(), Currency.getInstance("USD")), checkingDto.getSecretKey(),
                 primaryUser, secundaryUser.get(), checkingDto.getCreationDate());

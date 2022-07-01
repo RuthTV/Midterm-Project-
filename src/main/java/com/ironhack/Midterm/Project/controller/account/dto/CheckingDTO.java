@@ -1,10 +1,5 @@
 package com.ironhack.Midterm.Project.controller.account.dto;
 
-import com.ironhack.Midterm.Project.enums.Status;
-import com.ironhack.Midterm.Project.model.accounts.Account;
-import com.ironhack.Midterm.Project.model.accounts.Money;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 

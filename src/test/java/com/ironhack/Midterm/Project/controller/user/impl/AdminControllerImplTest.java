@@ -1,9 +1,6 @@
 package com.ironhack.Midterm.Project.controller.user.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.Midterm.Project.model.address.Address;
-import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +14,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 

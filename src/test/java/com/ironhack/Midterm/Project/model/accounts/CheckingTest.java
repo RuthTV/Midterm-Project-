@@ -1,14 +1,13 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
-import com.ironhack.Midterm.Project.model.accounts.Checking;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.repositories.userRepository.AdminRepository;
-import com.ironhack.Midterm.Project.repositories.userRepository.UserClassRepository;
+import com.ironhack.Midterm.Project.repositories.userRepository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class CheckingTest {
     @Autowired
-    private UserClassRepository userClassRepository;
+    private UserRepository userRepository;
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
@@ -55,7 +54,7 @@ class CheckingTest {
     @AfterEach
     void tearDown() {
         checkingRepository.deleteAll();
-        userClassRepository.deleteAll();
+        userRepository.deleteAll();
         accountHolderRepository.deleteAll();
         adminRepository.deleteAll();
     }
@@ -82,8 +81,8 @@ class CheckingTest {
     @Test
     void getBalance_LastActualizedDateMore1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
-        Checking checking5 = new Checking(money3, "fngmhg_fhª", user1, Date.valueOf("2022-05-03"));
-        assertEquals(BigDecimal.valueOf(18988).setScale(2), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
+        Checking checking5 = new Checking(money3, "fngmhg_fhª", user1, Date.valueOf("2022-04-03"));
+        assertEquals(BigDecimal.valueOf(18976).setScale(2), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
         assertEquals(Date.valueOf("2022-06-03"), checking5.getLastActualizedDate());
     }
 }

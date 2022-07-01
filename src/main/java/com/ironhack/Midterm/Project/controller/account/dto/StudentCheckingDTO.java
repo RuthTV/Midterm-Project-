@@ -29,4 +29,44 @@ public class StudentCheckingDTO {
         this.secundaryUserId2 = secundaryUserId2;
         this.creationDate = creationDate;
     }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public Long getPrimaryUserId1() {
+        return primaryUserId1;
+    }
+
+    public void setPrimaryUserId1(Long primaryUserId1) {
+        this.primaryUserId1 = primaryUserId1;
+    }
+
+    public Long getSecundaryUserId2() {
+        return secundaryUserId2;
+    }
+
+    public void setSecundaryUserId2(Long secundaryUserId2) {
+        this.secundaryUserId2 = secundaryUserId2;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 }

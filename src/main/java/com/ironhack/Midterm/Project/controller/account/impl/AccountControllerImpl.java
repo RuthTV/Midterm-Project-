@@ -2,7 +2,6 @@ package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.Transference;
 import com.ironhack.Midterm.Project.controller.account.interfaces.AccountController;
-import com.ironhack.Midterm.Project.model.accounts.Money;
 import com.ironhack.Midterm.Project.repositories.accountRepository.AccountRepository;
 import com.ironhack.Midterm.Project.service.account.interfaces.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

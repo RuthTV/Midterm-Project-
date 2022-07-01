@@ -1,9 +1,6 @@
 package com.ironhack.Midterm.Project.controller.user.interfaces;
 
-import com.ironhack.Midterm.Project.model.accounts.Money;
-import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
-import com.ironhack.Midterm.Project.model.users.User;
 
 import java.util.List;
 

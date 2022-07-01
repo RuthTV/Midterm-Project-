@@ -3,6 +3,7 @@ package com.ironhack.Midterm.Project.model.accounts;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ironhack.Midterm.Project.enums.Status;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 

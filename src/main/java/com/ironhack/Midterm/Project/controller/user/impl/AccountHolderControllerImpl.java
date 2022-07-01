@@ -1,7 +1,6 @@
 package com.ironhack.Midterm.Project.controller.user.impl;
 
 import com.ironhack.Midterm.Project.controller.user.interfaces.AccountHolderController;
-import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRepository;
 import com.ironhack.Midterm.Project.service.user.interfaces.AccountHolderService;

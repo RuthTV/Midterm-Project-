@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.accounts;
 
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import javax.persistence.*;
@@ -7,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
 @Entity
@@ -62,7 +65,6 @@ public class Checking extends Account {
     }
 
     public Money getBalance(Date lastActualizedDate){
-        setLastActualizedDate(lastActualizedDate);
         balanceActualized(lastActualizedDate);
         return this.balance;
     }
@@ -87,12 +89,15 @@ public class Checking extends Account {
     }
 
     public void balanceActualized(Date lastActualizedDate){
+        Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
         if(today.isAfter(lastDateActualizedLocal.plusMonths(1))){
-            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(1)));
-            Money money = new Money(getBalance().getAmount().subtract(monthlyMaintenanceFee.getAmount()), Currency.getInstance("USD"));
-            setBalance(money);
+            long diffTodayLastActualized = ChronoUnit.MONTHS.between(lastDateActualizedLocal, today);
+            setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(diffTodayLastActualized)));
+            BigDecimal realMaintenanceeFee = monthlyMaintenanceFee.getAmount().multiply(BigDecimal.valueOf(diffTodayLastActualized));
+            money = new Money(getBalance().getAmount().subtract(realMaintenanceeFee), Currency.getInstance("USD"));
         }
+        setBalance(money);
     }
 }

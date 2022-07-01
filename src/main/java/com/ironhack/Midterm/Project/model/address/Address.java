@@ -1,8 +1,6 @@
 
 package com.ironhack.Midterm.Project.model.address;
 
-import com.ironhack.Midterm.Project.model.users.AccountHolder;
-
 import javax.persistence.*;
 
 @Embeddable

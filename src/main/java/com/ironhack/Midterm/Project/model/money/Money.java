@@ -1,4 +1,4 @@
-package com.ironhack.Midterm.Project.model.accounts;
+package com.ironhack.Midterm.Project.model.money;
 import java.math.RoundingMode;
 import java.math.BigDecimal;
 import java.util.Currency;

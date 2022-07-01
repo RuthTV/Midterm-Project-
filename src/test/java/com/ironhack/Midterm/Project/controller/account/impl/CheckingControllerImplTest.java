@@ -2,8 +2,9 @@ package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.address.Address;
+import com.ironhack.Midterm.Project.model.role.Role;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
 import com.ironhack.Midterm.Project.model.users.Admin;
 import com.ironhack.Midterm.Project.repositories.accountRepository.CheckingRepository;
@@ -14,8 +15,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,6 +30,7 @@ import java.sql.Date;
 import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class CheckingControllerImplTest {
     @Autowired
     private CheckingRepository checkingRepository;
@@ -44,7 +50,8 @@ class CheckingControllerImplTest {
     @Autowired
     private AccountHolderRepository accountHolderRepository;
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private PasswordEncoder passwordEncoder;
+    @Autowired
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Admin admin;
@@ -52,15 +59,17 @@ class CheckingControllerImplTest {
     private Checking checking1, checking2;
     private Money money, money2;
     private Address address;
+    private Role role;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Ambasaguas 55", 48891);
-        admin = new Admin("Ruth Telleria", "cbmnchmhc");
+        admin = new Admin("Ruth Telleria", passwordEncoder.encode("cbmnchmhc"));
+        role = new Role("ADMIN", admin);
+        admin.setRoles(Set.of(role));
         money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
         money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
-        accountHolder = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
+        accountHolder = new AccountHolder("Julen Telleria", passwordEncoder.encode("dngmfhmf"), Date.valueOf("1991-12-12"), address);
         checking1 = new Checking(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
         checking2 = new Checking(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         adminRepository.save(admin);
@@ -106,12 +115,14 @@ class CheckingControllerImplTest {
 
     @Test
     void store() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic YWRtaW46Y2JtbmNobWhj");
         Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
         Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
-        Checking checking = new Checking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
+        Checking checking = new Checking(money3, "123456",admin3, Date.valueOf("2020-01-23"));
         String body = objectMapper.writeValueAsString(checking);
         MvcResult mvcResult = mockMvc.perform(
-                        post("/checkings")
+                        post("/checkings").headers(httpHeaders)
                                 .content(body)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

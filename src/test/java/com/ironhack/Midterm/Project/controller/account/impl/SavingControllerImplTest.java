@@ -1,7 +1,7 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.Midterm.Project.model.accounts.Money;
+import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.address.Address;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
