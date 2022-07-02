@@ -8,6 +8,7 @@ import com.ironhack.Midterm.Project.service.user.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,8 @@ public class AdminControllerImpl implements AdminController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/admins")
     @ResponseStatus(HttpStatus.OK)
@@ -32,6 +35,7 @@ public class AdminControllerImpl implements AdminController {
     @ResponseStatus(HttpStatus.OK)
     public Admin findById(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable(name = "id") Long id) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        String password = passwordEncoder.encode(optionalAdmin.get().getPassword());
         return optionalAdmin.get();
     }
 

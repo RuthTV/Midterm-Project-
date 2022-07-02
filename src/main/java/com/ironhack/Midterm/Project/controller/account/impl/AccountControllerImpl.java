@@ -46,7 +46,7 @@ public class AccountControllerImpl implements AccountController {
 
     }
 
-    @PatchMapping("/third-party/{hashedKey}/send")
+    @PatchMapping("/thirdParty/{hashedKey}/send")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account thirdPartySend(@PathVariable String hashedKey,
                                      @RequestBody @Valid ThirdPartyDTO thirdPartyTransactionDTO) {

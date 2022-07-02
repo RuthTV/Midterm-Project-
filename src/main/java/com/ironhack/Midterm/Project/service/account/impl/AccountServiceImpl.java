@@ -71,13 +71,13 @@ public class AccountServiceImpl implements AccountService {
         String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
         ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
-        Account receivingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
+        Account sendingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found"));
-        if (!password.equals(receivingAccount.getSecretKey())){
+        if (!password.equals(sendingAccount.getSecretKey())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The secret key indicated is not correct");
         }
-        receivingAccount.getBalance().setAmount(receivingAccount.getBalance().decreaseAmount(thirdPartyDto.getMoney()));
-        accountRepository.save(receivingAccount);
-        return receivingAccount;
+        sendingAccount.getBalance().setAmount(sendingAccount.getBalance().decreaseAmount(thirdPartyDto.getMoney()));
+        accountRepository.save(sendingAccount);
+        return sendingAccount;
     }
 }

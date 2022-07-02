@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.GET, "/checkings", "/creditCards", "/savings", "/studentCheckings").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/accountHolders", "/admins", "/thirdPartys").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/checkings/{id}/balance", "/creditCards/{id}/balance", "/studentCheckings/{id}/balance", "/savings/{id}/balance").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/thirdParty/{hashedKey}/receive", "/third-party/{hashedKey}/send").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/thirdParty/{hashedKey}/receive", "/thirdParty/{hashedKey}/send").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/checkings", "/creditCards", "/savings", "/studentCheckings").authenticated()
                 .antMatchers(HttpMethod.POST, "/thirdPartys").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/checkings/{id}", "/creditCards/{id}", "/savings/{id}", "/studentCheckings/{id}").hasRole("ADMIN")

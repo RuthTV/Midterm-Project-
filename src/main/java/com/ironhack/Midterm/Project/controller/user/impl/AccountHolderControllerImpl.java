@@ -8,6 +8,7 @@ import com.ironhack.Midterm.Project.service.user.interfaces.AccountHolderService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,8 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     private AccountHolderRepository accountHolderRepository;
     @Autowired
     private AccountHolderService accountHolderService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/accountHolders")
     @ResponseStatus(HttpStatus.OK)
@@ -31,6 +34,7 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     @ResponseStatus(HttpStatus.OK)
     public AccountHolder findById(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable(name = "id") Long id) {
         Optional<AccountHolder> optionalAccountHolder = accountHolderRepository.findById(id);
+        String password = passwordEncoder.encode(optionalAccountHolder.get().getPassword());
         return optionalAccountHolder.get();
     }
 
