@@ -41,7 +41,8 @@ public class AccountControllerImpl implements AccountController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account thirdPartyReceive(@PathVariable String hashedKey,
                                    @RequestBody @Valid ThirdPartyDTO thirdPartyTransactionDTO){
-        return accountService.thirdPartyReceive(thirdPartyTransactionDTO);
+
+        return accountService.thirdPartyReceive(thirdPartyTransactionDTO, hashedKey);
 
     }
 
@@ -49,6 +50,6 @@ public class AccountControllerImpl implements AccountController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account thirdPartySend(@PathVariable String hashedKey,
                                      @RequestBody @Valid ThirdPartyDTO thirdPartyTransactionDTO) {
-        return accountService.thirdPartySend(thirdPartyTransactionDTO);
+        return accountService.thirdPartySend(thirdPartyTransactionDTO,hashedKey);
     }
 }

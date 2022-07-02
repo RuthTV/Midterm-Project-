@@ -15,7 +15,6 @@ import java.sql.Date;
 @SpringBootApplication
 @Profile("!test")
 public class MidtermProjectApplication {
-	@Autowired
 
 
 	public static void main(String[] args) {

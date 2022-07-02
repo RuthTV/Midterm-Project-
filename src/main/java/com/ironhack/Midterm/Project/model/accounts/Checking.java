@@ -27,8 +27,6 @@ public class Checking extends Account {
             @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
     })
     private Money minimumBalance;
-    @Embedded
-    private Money balance;
 
     @NotNull
     private Date lastActualizedDate;
@@ -66,16 +64,16 @@ public class Checking extends Account {
 
     public Money getBalance(Date lastActualizedDate){
         balanceActualized(lastActualizedDate);
-        return this.balance;
+        return super.getBalance();
     }
 
     public String setBalance(Money balance){
-        this.balance = balance;
+        super.setBalance(balance);
         if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
             balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
         }else {
-            this.balance = balance;
+            super.setBalance(balance);
             return "The balance has been set";
         }
     }

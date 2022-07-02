@@ -26,9 +26,6 @@ public class Saving extends Account {
             @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
     })
     private Money minimumBalance = new Money(BigDecimal.valueOf(1000), Currency.getInstance("USD"));
-    @Embedded
- //   @DecimalMin(value = "100.00", message = "balance can not be lower than 100")
-    private Money balance;
 
     public Saving() {
     }
@@ -81,22 +78,22 @@ public class Saving extends Account {
 
     public Money getBalance(Date lastActualizedDate){
         balanceActualized(lastActualizedDate);
-        return this.balance;
+        return super.getBalance();
     }
 
     public String setBalance(Money balance){
-        this.balance = balance;
+        super.setBalance(balance);
         if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
             balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
         }else {
-            this.balance = balance;
+            super.setBalance(balance);
             return "The balance has been set";
         }
     }
 
     public Money getBalance() {
-        return balance;
+        return super.getBalance();
     }
 
     public Date getLastActualizedDate() {
@@ -115,8 +112,8 @@ public class Saving extends Account {
         if (today.isAfter(lastDateActualizedLocalPlusMonth)){
             long diffTodayLastActualized = ChronoUnit.YEARS.between(lastDateActualizedLocal, today);
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusYears(diffTodayLastActualized)));
-            BigDecimal interest = balance.getAmount().multiply(getInterestRate()).multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale(2, RoundingMode.HALF_UP);
-            money = new Money(balance.getAmount().add(interest), Currency.getInstance("USD"));
+            BigDecimal interest = getBalance().getAmount().multiply(getInterestRate()).multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale(2, RoundingMode.HALF_UP);
+            money = new Money(getBalance().getAmount().add(interest), Currency.getInstance("USD"));
 
         }
         setBalance(money);

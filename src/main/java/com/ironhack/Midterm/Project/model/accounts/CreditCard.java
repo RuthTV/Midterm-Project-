@@ -27,8 +27,6 @@ public class CreditCard extends Account {
             @AttributeOverride(name = "currency", column = @Column(name = "credit_limit_currency"))
     })
     private Money creditLimit;
-    @Embedded
-    private Money balance;
 
     public CreditCard() {
     }
@@ -143,11 +141,11 @@ public class CreditCard extends Account {
 
     public Money getBalance(Date lastActualizedDate) {
         balanceActualized(lastActualizedDate);
-        return this.balance;
+        return super.getBalance();
     }
 
     public String setBalance(Money balance) {
-        this.balance = balance;
+        super.setBalance(balance);
         return "The balance has been set";
     }
 
@@ -160,7 +158,7 @@ public class CreditCard extends Account {
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(diffTodayLastActualized)));
             BigDecimal interest = getInterestRate().divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
             BigDecimal realInterest = interest.multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale( 2, RoundingMode.HALF_UP);
-            money = new Money(balance.getAmount().add(realInterest.multiply(balance.getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
+            money = new Money(getBalance().getAmount().add(realInterest.multiply(getBalance().getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
         }
         setBalance(money);
     }

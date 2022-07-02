@@ -53,9 +53,9 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public Account thirdPartyReceive(ThirdPartyDTO thirdPartyDto){
+    public Account thirdPartyReceive(ThirdPartyDTO thirdPartyDto, String hashedKey){
         String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
-        ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(thirdPartyDto.getHashedKey()).orElseThrow(() ->
+        ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         Account receivingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found"));
@@ -67,9 +67,9 @@ public class AccountServiceImpl implements AccountService {
         return receivingAccount;
     }
 
-    public Account thirdPartySend(ThirdPartyDTO thirdPartyDto){
+    public Account thirdPartySend(ThirdPartyDTO thirdPartyDto, String hashedKey){
         String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
-        ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(thirdPartyDto.getHashedKey()).orElseThrow(() ->
+        ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         Account receivingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found"));

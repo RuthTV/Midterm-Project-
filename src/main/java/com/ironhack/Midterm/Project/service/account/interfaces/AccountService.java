@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 public interface AccountService {
     void transferBalance(Transference transference);
-    Account thirdPartyReceive(ThirdPartyDTO thirdPartyTransactionDTO);
-    Account thirdPartySend(ThirdPartyDTO thirdPartyDto);
+    Account thirdPartyReceive(ThirdPartyDTO thirdPartyTransactionDTO, String hashedKey);
+    Account thirdPartySend(ThirdPartyDTO thirdPartyDto, String hashedKey);
 
 }

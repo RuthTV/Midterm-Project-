@@ -6,17 +6,15 @@ public class ThirdPartyDTO {
     private BigDecimal money;
     private Long accountId;
     private String secretKey;
-    private String hashedKey;
 
 
     public ThirdPartyDTO() {
     }
 
-    public ThirdPartyDTO(BigDecimal money, Long accountId, String secretKey, String hashedKey) {
+    public ThirdPartyDTO(BigDecimal money, Long accountId, String secretKey) {
         this.money = money;
         this.accountId = accountId;
         this.secretKey = secretKey;
-        this.hashedKey = hashedKey;
     }
 
     public BigDecimal getMoney() {
@@ -41,13 +39,5 @@ public class ThirdPartyDTO {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
-    }
-
-    public String getHashedKey() {
-        return hashedKey;
-    }
-
-    public void setHashedKey(String hashedKey) {
-        this.hashedKey = hashedKey;
     }
 }

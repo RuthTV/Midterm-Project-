@@ -2,6 +2,7 @@ package com.ironhack.Midterm.Project.model.accounts;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.Midterm.Project.enums.Status;
 import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.users.User;
@@ -28,11 +29,11 @@ public abstract class Account {
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
     @NotNull(message = "There must be a owner")
-  //  @JsonBackReference
+    @JsonIgnore
     private User primaryOwner;
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
- //   @JsonBackReference
+    @JsonIgnore
     private User secondayOwner;
     @Embedded
     @AttributeOverrides({
