@@ -22,10 +22,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Role> roles;
     @OneToMany(mappedBy = "primaryOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+//    @JsonManagedReference
     private Set<Account> accounts;
     @OneToMany(mappedBy = "secondayOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+ //   @JsonManagedReference
     private Set<Account> secondaryAccounts;
 
     public User() {

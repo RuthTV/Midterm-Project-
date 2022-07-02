@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface StudentCheckingService {
     StudentChecking store(StudentCheckingDTO studentCheckingDto);
-    void update(Long id, StudentChecking studentChecking);
+    void update(Long id, StudentCheckingDTO studentCheckingDto);
     void updateBalance(Long id, BigDecimal balance);
     void delete(Long id);
 

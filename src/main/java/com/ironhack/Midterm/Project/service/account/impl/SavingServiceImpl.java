@@ -1,6 +1,7 @@
 package com.ironhack.Midterm.Project.service.account.impl;
 
 import com.ironhack.Midterm.Project.controller.account.dto.SavingDTO;
+import com.ironhack.Midterm.Project.model.accounts.CreditCard;
 import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.accounts.Saving;
 import com.ironhack.Midterm.Project.model.users.AccountHolder;
@@ -9,6 +10,7 @@ import com.ironhack.Midterm.Project.repositories.userRepository.AccountHolderRep
 import com.ironhack.Midterm.Project.service.account.interfaces.SavingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,27 +25,44 @@ public class SavingServiceImpl implements SavingService {
 
     @Autowired
     private AccountHolderRepository accountHolderRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public Saving store(SavingDTO savingDto){
-        AccountHolder primaryUser = accountHolderRepository.findById(savingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        AccountHolder primaryUser = accountHolderRepository.findById(savingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saving not found"));
+        savingDto.setSecretKey(passwordEncoder.encode(savingDto.getSecretKey()));
+        if (savingDto.getSecundaryUserId2() == 0L) {
+            Saving saving = new Saving(new Money(savingDto.getMoney(), Currency.getInstance("USD")), savingDto.getSecretKey(),
+                    primaryUser, savingDto.getCreationDate());
+            return saving;
+        }
         Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(savingDto.getSecundaryUserId2());
         Saving saving = new Saving(new Money(savingDto.getMoney(), Currency.getInstance("USD")), savingDto.getSecretKey(),
                 primaryUser, secundaryUser.get(), savingDto.getCreationDate(), savingDto.getInterestRate());
         return saving;
     }
 
-    public void update(Long id, Saving saving) {
-        Saving saving1 = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        saving.setId(id);
+    public void update(Long id, SavingDTO savingDto) {
+        Saving saving1 = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saving not found"));
+        Optional<AccountHolder> primaryUser = accountHolderRepository.findById(savingDto.getPrimaryUserId1());
+        savingDto.setSecretKey(passwordEncoder.encode(savingDto.getSecretKey()));
+        if (savingDto.getSecundaryUserId2() == 0L) {
+            Saving saving = new Saving(new Money(savingDto.getMoney(), Currency.getInstance("USD")), savingDto.getSecretKey(),
+                    primaryUser.get(), savingDto.getCreationDate());
+            savingRepository.save(saving);
+        }
+        Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(savingDto.getSecundaryUserId2());
+        Saving saving = new Saving(new Money(savingDto.getMoney(), Currency.getInstance("USD")), savingDto.getSecretKey(),
+                primaryUser.get(), secundaryUser.get(), savingDto.getCreationDate(), savingDto.getInterestRate());
         savingRepository.save(saving);
     }
 
     public void updateBalance(Long id, BigDecimal balance) {
-        Saving saving = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
-        saving.getBalance().setAmount(balance);
+        Saving saving = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saving not found"));
+        saving.getBalance(saving.getLastActualizedDate()).setAmount(balance);
         savingRepository.save(saving);
     }
     public void delete(Long id) {
-        Saving saving = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        Saving saving = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saving not found"));
         savingRepository.delete(saving);
     }
 

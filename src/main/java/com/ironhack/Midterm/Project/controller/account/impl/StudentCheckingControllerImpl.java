@@ -6,9 +6,11 @@ import com.ironhack.Midterm.Project.controller.account.interfaces.StudentCheckin
 import com.ironhack.Midterm.Project.model.accounts.StudentChecking;
 import com.ironhack.Midterm.Project.model.users.User;
 import com.ironhack.Midterm.Project.repositories.accountRepository.StudentCheckingRepository;
+import com.ironhack.Midterm.Project.security.CustomUserDetails;
 import com.ironhack.Midterm.Project.service.account.interfaces.StudentCheckingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,46 +27,46 @@ public class StudentCheckingControllerImpl implements StudentCheckingController 
 
     @GetMapping("/studentCheckings")
     @ResponseStatus(HttpStatus.OK)
-    public List<StudentChecking> findAll() {
+    public List<StudentChecking> findAll(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return studentCheckingRepository.findAll();
     }
 
     @GetMapping("/studentCheckings/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public StudentChecking findById(@PathVariable(name = "id") Long id) {
+    public StudentChecking findById(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable(name = "id") Long id) {
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(id);
         return optionalStudentChecking.get();
     }
 
     @GetMapping("/studentCheckings/primaryOwner/{primaryOwner}")
     @ResponseStatus(HttpStatus.OK)
-    public StudentChecking findByUser(@PathVariable(name = "primaryOwner") User user) {
+    public StudentChecking findByUser(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable(name = "primaryOwner") User user) {
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findByUserid(user.getId());
         return optionalStudentChecking.get();
     }
 
     @PostMapping("/studentCheckings")
     @ResponseStatus(HttpStatus.CREATED)
-    public StudentChecking store(@RequestBody @Valid StudentCheckingDTO studentCheckingDto) {
-        StudentChecking studentChecking = store(studentCheckingDto);
+    public StudentChecking store(@AuthenticationPrincipal CustomUserDetails userDetails,@RequestBody @Valid StudentCheckingDTO studentCheckingDto) {
+        StudentChecking studentChecking = studentCheckingService.store(studentCheckingDto);
         return studentCheckingRepository.save(studentChecking);
     }
 
     @PutMapping("/studentCheckings/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @RequestBody @Valid StudentChecking studentChecking) {
-        studentCheckingService.update(id, studentChecking);
+    public void update(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable Long id, @RequestBody @Valid StudentCheckingDTO studentCheckingDto) {
+        studentCheckingService.update(id, studentCheckingDto);
     }
 
     @PatchMapping("/studentCheckings/{id}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBalance(@PathVariable Long id, @RequestBody @Valid MoneyDTO balance) {
+    public void updateBalance(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable Long id, @RequestBody @Valid MoneyDTO balance) {
         studentCheckingService.updateBalance(id, balance.getBalance());
     }
 
     @DeleteMapping("/studentCheckings/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable Long id) {
         studentCheckingService.delete(id);
     }
 }

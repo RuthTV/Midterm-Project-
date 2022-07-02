@@ -14,12 +14,12 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private ThirdPartyRepository thirdPartyRepository;
 
     public void update(Long id, ThirdParty thirdParty) {
-        ThirdParty thirdParty1 = thirdPartyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        ThirdParty thirdParty1 = thirdPartyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         thirdParty.setId(id);
         thirdPartyRepository.save(thirdParty);
     }
     public void delete(Long id) {
-        ThirdParty thirdParty = thirdPartyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        ThirdParty thirdParty = thirdPartyRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         thirdPartyRepository.delete(thirdParty);
     }
 }

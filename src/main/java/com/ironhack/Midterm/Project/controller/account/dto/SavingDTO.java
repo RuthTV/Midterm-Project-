@@ -11,7 +11,7 @@ public class SavingDTO {
     private BigDecimal money;
     private String secretKey;
     private Long primaryUserId1;
-    private Long secundaryUserId2;
+    private Long secundaryUserId2 = 0L;
     private Date creationDate;
 
     @DecimalMax(value = "0.5")

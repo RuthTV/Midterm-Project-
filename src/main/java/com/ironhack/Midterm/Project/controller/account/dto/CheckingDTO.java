@@ -7,7 +7,7 @@ public class CheckingDTO {
     private BigDecimal money;
     private String secretKey;
     private Long primaryUserId1;
-    private Long secundaryUserId2;
+    private Long secundaryUserId2 = 0L;
     private Date creationDate;
 
 
@@ -76,5 +76,17 @@ public class CheckingDTO {
 
     public void setMinimumBalance(BigDecimal minimumBalance) {
         this.minimumBalance = minimumBalance;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckingDTO{" +
+                "money=" + money +
+                ", secretKey='" + secretKey + '\'' +
+                ", primaryUserId1=" + primaryUserId1 +
+                ", secundaryUserId2=" + secundaryUserId2 +
+                ", creationDate=" + creationDate +
+                ", minimumBalance=" + minimumBalance +
+                '}';
     }
 }

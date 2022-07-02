@@ -14,12 +14,12 @@ public class AdminServiceImpl implements AdminService {
     private AdminRepository adminRepository;
 
     public void update(Long id, Admin admin) {
-        Admin admin1 = adminRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        Admin admin1 = adminRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
         admin.setId(id);
         adminRepository.save(admin);
     }
     public void delete(Long id) {
-        Admin admin = adminRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        Admin admin = adminRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found"));
         adminRepository.delete(admin);
     }
 }

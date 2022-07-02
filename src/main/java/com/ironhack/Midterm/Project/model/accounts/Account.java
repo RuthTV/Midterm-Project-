@@ -28,14 +28,13 @@ public abstract class Account {
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
     @NotNull(message = "There must be a owner")
-    @JsonBackReference
+  //  @JsonBackReference
     private User primaryOwner;
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
-    @JsonBackReference
+ //   @JsonBackReference
     private User secondayOwner;
     @Embedded
-    @NotNull(message = "Balance can no be null")
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "penaltyFee_amount")),
             @AttributeOverride(name = "currency", column = @Column(name = "penaltyFee_currency"))

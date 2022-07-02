@@ -13,12 +13,12 @@ public class AccountHolderServiceImpl implements AccountHolderService {
     @Autowired
     private AccountHolderRepository accountHolderRepository;
     public void update(Long id, AccountHolder accountHolder) {
-        AccountHolder accountHolder1 = accountHolderRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        AccountHolder accountHolder1 = accountHolderRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Holder not found"));
         accountHolder.setId(id);
         accountHolderRepository.save(accountHolder);
     }
     public void delete(Long id) {
-        AccountHolder accountHolder = accountHolderRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Checking not found"));
+        AccountHolder accountHolder = accountHolderRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Holder not found"));
         accountHolderRepository.delete(accountHolder);
     }
 }

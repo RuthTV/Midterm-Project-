@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public interface CreditCardService {
     CreditCard store(CreditCardDTO creditCardDto);
-    void update(Long id, CreditCard creditCard);
+    void update(Long id, CreditCardDTO creditCardDto);
     void updateBalance(Long id, BigDecimal balance);
     void delete(Long id);
 }
