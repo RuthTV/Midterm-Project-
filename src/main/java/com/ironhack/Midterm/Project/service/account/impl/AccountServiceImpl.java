@@ -54,12 +54,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public Account thirdPartyReceive(ThirdPartyDTO thirdPartyDto, String hashedKey){
-        String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
+     //   String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
         ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         Account receivingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found"));
-        if (!password.equals(receivingAccount.getSecretKey())){
+        if (!thirdPartyDto.getSecretKey().equals(receivingAccount.getSecretKey())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The secret key indicated is not correct");
         }
         receivingAccount.getBalance().setAmount(receivingAccount.getBalance().increaseAmount(thirdPartyDto.getMoney()));
@@ -68,12 +68,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public Account thirdPartySend(ThirdPartyDTO thirdPartyDto, String hashedKey){
-        String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
+   //     String password = passwordEncoder.encode(thirdPartyDto.getSecretKey());
         ThirdParty thirdParty = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Third Party not found"));
         Account sendingAccount = accountRepository.findById(thirdPartyDto.getAccountId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Receiving account not found"));
-        if (!password.equals(sendingAccount.getSecretKey())){
+        if (!thirdPartyDto.getSecretKey().equals(sendingAccount.getSecretKey())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The secret key indicated is not correct");
         }
         sendingAccount.getBalance().setAmount(sendingAccount.getBalance().decreaseAmount(thirdPartyDto.getMoney()));
