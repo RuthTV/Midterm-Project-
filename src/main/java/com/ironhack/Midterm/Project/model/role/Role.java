@@ -1,5 +1,6 @@
 package com.ironhack.Midterm.Project.model.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.Midterm.Project.model.users.User;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class Role {
 
     @ManyToOne
     @JoinColumn(name = "user")
+    @JsonIgnore
     private User user;
 
     public Role() {

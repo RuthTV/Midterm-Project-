@@ -76,8 +76,7 @@ class AdminControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("dngmfhmf"));
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("Julen"));
     }
 
     @Test
