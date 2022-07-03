@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ironhack.Midterm.Project.model.accounts.Account;
 import com.ironhack.Midterm.Project.model.role.Role;
+import com.ironhack.Midterm.Project.repositories.accountRepository.AccountRepository;
+import com.ironhack.Midterm.Project.service.account.interfaces.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -25,10 +28,10 @@ public abstract class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Role> roles = Set.of(new Role ("USER"));
-    @OneToMany(mappedBy = "primaryOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "primaryOwner", /*cascade = CascadeType.ALL, */fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Account> accounts;
-    @OneToMany(mappedBy = "secondayOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "secondayOwner", /*cascade = CascadeType.ALL, */fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Account> secondaryAccounts;
 
@@ -113,4 +116,5 @@ public abstract class User {
     public int hashCode() {
         return Objects.hash(username, password, roles, accounts, secondaryAccounts);
     }
+
 }
