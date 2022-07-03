@@ -1,6 +1,8 @@
 package com.ironhack.Midterm.Project.model.users;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ironhack.Midterm.Project.model.accounts.Account;
 import com.ironhack.Midterm.Project.model.role.Role;
@@ -11,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +23,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    private Set<Role> roles = Set.of(new Role ("USER"));
     @OneToMany(mappedBy = "primaryOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Account> accounts;

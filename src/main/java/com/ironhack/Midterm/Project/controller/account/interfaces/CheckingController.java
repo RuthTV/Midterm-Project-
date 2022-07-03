@@ -15,6 +15,6 @@ public interface CheckingController {
     Checking store(@AuthenticationPrincipal CustomUserDetails userDetails,CheckingDTO checkingDto);
     void update(@AuthenticationPrincipal CustomUserDetails userDetails,Long id, CheckingDTO checkingDto);
     void updateBalance(@AuthenticationPrincipal CustomUserDetails userDetails,Long id, MoneyDTO balance);
-    void delete(@AuthenticationPrincipal CustomUserDetails userDetails,Long id);
+    void remove(@AuthenticationPrincipal CustomUserDetails userDetails,Long id);
 
 }

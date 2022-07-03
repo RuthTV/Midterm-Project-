@@ -154,4 +154,17 @@ public class CreditCardDTO {
     public void setCreditLimit(BigDecimal creditLimit) {
         this.creditLimit = creditLimit;
     }
+
+    @Override
+    public String toString() {
+        return "CreditCardDTO{" +
+                "money=" + money +
+                ", secretKey='" + secretKey + '\'' +
+                ", primaryUserId1=" + primaryUserId1 +
+                ", secundaryUserId2=" + secundaryUserId2 +
+                ", creationDate=" + creationDate +
+                ", interestRate=" + interestRate +
+                ", creditLimit=" + creditLimit +
+                '}';
+    }
 }

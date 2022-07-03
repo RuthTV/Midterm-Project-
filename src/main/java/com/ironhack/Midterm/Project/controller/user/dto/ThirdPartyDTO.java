@@ -19,7 +19,7 @@ public class ThirdPartyDTO {
     public ThirdPartyDTO(BigDecimal money, Long accountId, String secretKey) {
         this.money = money;
         this.accountId = accountId;
-    //    this.secretKey = passwordEncoder.encode(secretKey);
+   //     this.secretKey = passwordEncoder.encode(secretKey);
         this.secretKey = secretKey;
     }
 

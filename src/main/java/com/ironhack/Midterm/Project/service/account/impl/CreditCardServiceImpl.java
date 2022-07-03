@@ -29,7 +29,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     private PasswordEncoder passwordEncoder;
 
     public CreditCard store(CreditCardDTO creditCardDto){
-        AccountHolder primaryUser = accountHolderRepository.findById(creditCardDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CreditCard not found"));
+        AccountHolder primaryUser = accountHolderRepository.findById(creditCardDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Accountholder not found"));
         creditCardDto.setSecretKey(passwordEncoder.encode(creditCardDto.getSecretKey()));
         if (creditCardDto.getSecundaryUserId2() == 0L) {
             CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(),
@@ -44,22 +44,24 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     public void update(Long id, CreditCardDTO creditCardDto) {
         CreditCard creditCard1 = creditCardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CreditCard not found"));
-        Optional<AccountHolder> primaryUser = accountHolderRepository.findById(creditCardDto.getPrimaryUserId1());
+        AccountHolder primaryUser = accountHolderRepository.findById(creditCardDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Accountholder not found"));
         creditCardDto.setSecretKey(passwordEncoder.encode(creditCardDto.getSecretKey()));
         if (creditCardDto.getSecundaryUserId2() == 0L) {
             CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(),
-                    primaryUser.get(), creditCardDto.getCreationDate());
+                    primaryUser, creditCardDto.getCreationDate());
+            creditCardRepository.save(creditCard);
+        }else {
+            Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(creditCardDto.getSecundaryUserId2());
+            CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(), primaryUser, secundaryUser.get(),
+                    creditCardDto.getInterestRate(), creditCardDto.getCreationDate(), new Money(creditCardDto.getCreditLimit(), Currency.getInstance("USD")));
             creditCardRepository.save(creditCard);
         }
-        Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(creditCardDto.getSecundaryUserId2());
-        CreditCard creditCard = new CreditCard(new Money(creditCardDto.getMoney(), Currency.getInstance("USD")), creditCardDto.getSecretKey(), primaryUser.get(), secundaryUser.get(),
-                creditCardDto.getInterestRate(), creditCardDto.getCreationDate(), new Money(creditCardDto.getCreditLimit(), Currency.getInstance("USD")));
-        creditCardRepository.save(creditCard);
     }
 
     public void updateBalance(Long id, BigDecimal balance) {
         CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CreditCard not found"));
-        creditCard.getBalance(creditCard.getLastActualizedDate()).setAmount(balance);
+        creditCard.getBalance().setAmount(balance);
+        creditCard.setBalance(creditCard.getBalance(creditCard.getLastActualizedDate()));
         creditCardRepository.save(creditCard);
     }
     public void delete(Long id) {

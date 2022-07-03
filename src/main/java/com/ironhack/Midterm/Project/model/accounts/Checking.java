@@ -63,12 +63,10 @@ public class Checking extends Account {
     }
 
     public Money getBalance(Date lastActualizedDate){
-        balanceActualized(lastActualizedDate);
-        return super.getBalance();
+        return balanceActualized(lastActualizedDate);
     }
 
     public String setBalance(Money balance){
-        super.setBalance(balance);
         if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
             balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
@@ -86,16 +84,20 @@ public class Checking extends Account {
         this.lastActualizedDate = lastActualizedDate;
     }
 
-    public void balanceActualized(Date lastActualizedDate){
+    public Money balanceActualized(Date lastActualizedDate){
         Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
         if(today.isAfter(lastDateActualizedLocal.plusMonths(1))){
             long diffTodayLastActualized = ChronoUnit.MONTHS.between(lastDateActualizedLocal, today);
+            if(diffTodayLastActualized == 0L){
+                money = getBalance();
+            }
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(diffTodayLastActualized)));
             BigDecimal realMaintenanceeFee = monthlyMaintenanceFee.getAmount().multiply(BigDecimal.valueOf(diffTodayLastActualized));
             money = new Money(getBalance().getAmount().subtract(realMaintenanceeFee), Currency.getInstance("USD"));
         }
         setBalance(money);
+        return getBalance();
     }
 }

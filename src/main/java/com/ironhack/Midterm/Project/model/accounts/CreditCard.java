@@ -140,16 +140,14 @@ public class CreditCard extends Account {
     }
 
     public Money getBalance(Date lastActualizedDate) {
-        balanceActualized(lastActualizedDate);
-        return super.getBalance();
+        return balanceActualized(lastActualizedDate);
     }
 
     public String setBalance(Money balance) {
-        super.setBalance(balance);
         return "The balance has been set";
     }
 
-    public void balanceActualized(Date lastActualizedDate){
+    public Money balanceActualized(Date lastActualizedDate){
         Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
@@ -157,9 +155,10 @@ public class CreditCard extends Account {
             long diffTodayLastActualized = ChronoUnit.MONTHS.between(lastDateActualizedLocal, today);
             setLastActualizedDate(Date.valueOf(lastDateActualizedLocal.plusMonths(diffTodayLastActualized)));
             BigDecimal interest = getInterestRate().divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-            BigDecimal realInterest = interest.multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale( 2, RoundingMode.HALF_UP);
+            BigDecimal realInterest = interest.multiply(BigDecimal.valueOf(diffTodayLastActualized)).setScale(2, RoundingMode.HALF_UP);
             money = new Money(getBalance().getAmount().add(realInterest.multiply(getBalance().getAmount()).setScale(2, RoundingMode.HALF_UP)), Currency.getInstance("USD"));
+            super.setBalance(money);
         }
-        setBalance(money);
+        return getBalance();
     }
 }

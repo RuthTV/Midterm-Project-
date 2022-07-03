@@ -29,7 +29,7 @@ public class StudentCheckingServiceImpl implements StudentCheckingService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     public StudentChecking store(StudentCheckingDTO studentCheckingDto){
-        AccountHolder primaryUser = accountHolderRepository.findById(studentCheckingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StudentChecking not found"));
+        AccountHolder primaryUser = accountHolderRepository.findById(studentCheckingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
         studentCheckingDto.setSecretKey(passwordEncoder.encode(studentCheckingDto.getSecretKey()));
         LocalDate today24YearsBefore = LocalDate.now().minusYears(24);
         if(primaryUser.getDateOfBirth().toLocalDate().isBefore(today24YearsBefore)){
@@ -49,16 +49,17 @@ public class StudentCheckingServiceImpl implements StudentCheckingService {
     public void update(Long id, StudentCheckingDTO studentCheckingDto) {
         StudentChecking studentChecking1 = studentCheckingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StudentChecking not found"));
         studentCheckingDto.setSecretKey(passwordEncoder.encode(studentCheckingDto.getSecretKey()));
-        Optional<AccountHolder> primaryUser = accountHolderRepository.findById(studentCheckingDto.getPrimaryUserId1());
+        AccountHolder primaryUser = accountHolderRepository.findById(studentCheckingDto.getPrimaryUserId1()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
         if (studentCheckingDto.getSecundaryUserId2() == 0L) {
             StudentChecking studentChecking = new StudentChecking(new Money(studentCheckingDto.getMoney(), Currency.getInstance("USD")), studentCheckingDto.getSecretKey(),
-                    primaryUser.get(), studentCheckingDto.getCreationDate());
+                    primaryUser, studentCheckingDto.getCreationDate());
+            studentCheckingRepository.save(studentChecking);
+        }else {
+            Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(studentCheckingDto.getSecundaryUserId2());
+            StudentChecking studentChecking = new StudentChecking(new Money(studentCheckingDto.getMoney(), Currency.getInstance("USD")), studentCheckingDto.getSecretKey(),
+                    primaryUser, secundaryUser.get(), studentCheckingDto.getCreationDate());
             studentCheckingRepository.save(studentChecking);
         }
-        Optional<AccountHolder> secundaryUser = accountHolderRepository.findById(studentCheckingDto.getSecundaryUserId2());
-        StudentChecking studentChecking = new StudentChecking(new Money(studentCheckingDto.getMoney(), Currency.getInstance("USD")), studentCheckingDto.getSecretKey(),
-                primaryUser.get(), secundaryUser.get(), studentCheckingDto.getCreationDate());
-        studentCheckingRepository.save(studentChecking);
     }
 
     public void updateBalance(Long id, BigDecimal balance) {

@@ -10,5 +10,5 @@ public interface CheckingService {
     Checking store(CheckingDTO checkingDto);
     Checking update(Long id, CheckingDTO checkingDto);
     void updateBalance(Long id, BigDecimal balance);
-    void delete(Long id);
+    Checking delete(Long id);
 }

@@ -82,7 +82,7 @@ class CheckingTest {
     void getBalance_LastActualizedDateMore1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
         Checking checking5 = new Checking(money3, "fngmhg_fhª", user1, Date.valueOf("2022-04-03"));
-        assertEquals(BigDecimal.valueOf(18976).setScale(2), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
-        assertEquals(Date.valueOf("2022-06-03"), checking5.getLastActualizedDate());
+        assertEquals(BigDecimal.valueOf(18964).setScale(2), checking5.getBalance(checking5.getLastActualizedDate()).getAmount());
+        assertEquals(Date.valueOf("2022-07-03"), checking5.getLastActualizedDate());
     }
 }

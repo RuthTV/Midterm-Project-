@@ -94,8 +94,8 @@ class CreditCardTest {
     void getBalance_LastActualizedDateMore1month(){
         Money money3 = new Money(BigDecimal.valueOf(19000), Currency.getInstance("USD"));
         CreditCard creditCard2 = new CreditCard(money3, "fngmhg_fhª", user1, Date.valueOf("2022-03-03"));
-        assertEquals(BigDecimal.valueOf(20140).setScale(2), creditCard2.getBalance(creditCard2.getLastActualizedDate()).getAmount());
-        assertEquals(Date.valueOf("2022-06-03"), creditCard2.getLastActualizedDate());
+        assertEquals(BigDecimal.valueOf(20520).setScale(2), creditCard2.getBalance(creditCard2.getLastActualizedDate()).getAmount());
+        assertEquals(Date.valueOf("2022-07-03"), creditCard2.getLastActualizedDate());
 
     }
 }

@@ -70,7 +70,7 @@ public class CheckingControllerImpl implements CheckingController {
 
     @DeleteMapping("/checkings/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable Long id) {
-        checkingService.delete(id);
+    public void remove(@AuthenticationPrincipal CustomUserDetails userDetails,@PathVariable Long id) {
+        checkingRepository.delete(checkingService.delete(id));;
     }
 }

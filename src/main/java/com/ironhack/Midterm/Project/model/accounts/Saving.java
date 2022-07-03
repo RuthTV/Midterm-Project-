@@ -77,12 +77,10 @@ public class Saving extends Account {
     }
 
     public Money getBalance(Date lastActualizedDate){
-        balanceActualized(lastActualizedDate);
-        return super.getBalance();
+        return balanceActualized(lastActualizedDate);
     }
 
     public String setBalance(Money balance){
-        super.setBalance(balance);
         if(balance.getAmount().compareTo(minimumBalance.getAmount()) == -1) {
             balance.setAmount(balance.getAmount().subtract(getPenaltyFee().getAmount()));
             return "A penalty has been taken from the balance";
@@ -90,10 +88,6 @@ public class Saving extends Account {
             super.setBalance(balance);
             return "The balance has been set";
         }
-    }
-
-    public Money getBalance() {
-        return super.getBalance();
     }
 
     public Date getLastActualizedDate() {
@@ -104,7 +98,7 @@ public class Saving extends Account {
         this.lastActualizedDate = lastActualizedDate;
     }
 
-    public void balanceActualized(Date lastActualizedDate){
+    public Money balanceActualized(Date lastActualizedDate){
         Money money = new Money(Currency.getInstance("USD"));
         LocalDate today = LocalDate.now();
         LocalDate lastDateActualizedLocal = lastActualizedDate.toLocalDate();
@@ -116,6 +110,7 @@ public class Saving extends Account {
             money = new Money(getBalance().getAmount().add(interest), Currency.getInstance("USD"));
 
         }
-        setBalance(money);
+        super.setBalance(money);
+        return getBalance();
     }
 }

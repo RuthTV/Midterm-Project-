@@ -51,12 +51,12 @@ class AccountHolderControllerImplTest {
     @BeforeEach
     void setUp() {
         address = new Address("Ambasaguas 55", 48891);
-        admin = new Admin("Ruth Telleria", passwordEncoder.encode("123456"));
+        admin = new Admin("Ruth", passwordEncoder.encode("123456"));
         role = new Role("ADMIN", admin);
         admin.setRoles(Set.of(role));
         adminRepository.save(admin);
-        accountHolder1 = new AccountHolder("Julen Telleria", "dngmfhmf", Date.valueOf("1991-12-12"), address);
-        accountHolder2 = new AccountHolder("Ruth Telleria", "154816", Date.valueOf("1999-10-21"), address);
+        accountHolder1 = new AccountHolder("Julen Telleria", passwordEncoder.encode("dngmfhmf"), Date.valueOf("1991-12-12"), address);
+        accountHolder2 = new AccountHolder("Ruth Telleria", passwordEncoder.encode("154816"), Date.valueOf("1999-10-21"), address);
         accountHolderRepository.saveAll(List.of(accountHolder1, accountHolder2));
     }
 
@@ -69,7 +69,7 @@ class AccountHolderControllerImplTest {
     @Test
     void findAll_NoParams_AllAccountHolder() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic UnV0aCBUZWxsZXJpYTpjYm1uY2htaGM=");
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
         MvcResult mvcResult = mockMvc.perform(get("/accountHolders").headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +81,7 @@ class AccountHolderControllerImplTest {
     @Test
     void findById_Id_AccountHolder() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic UnV0aCBUZWxsZXJpYTpjYm1uY2htaGM=");
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
         MvcResult mvcResult = mockMvc.perform(get("/accountHolders/"+accountHolder1.getId()).headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -93,7 +93,7 @@ class AccountHolderControllerImplTest {
     @Test
     void store() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic UnV0aCBUZWxsZXJpYTpjYm1uY2htaGM=");
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
         AccountHolder accountHolder = new AccountHolder("Lorena Pardo", "fgj5516", Date.valueOf("1994-10-21"), address);
         String body = objectMapper.writeValueAsString(accountHolder);
         MvcResult mvcResult = mockMvc.perform(
@@ -112,7 +112,7 @@ class AccountHolderControllerImplTest {
     @Test
     void update() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic UnV0aCBUZWxsZXJpYTpjYm1uY2htaGM=");
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
         AccountHolder accountHolder = new AccountHolder("Lorena Pardo", "fgj5516", Date.valueOf("1994-10-21"), address);
         String body = objectMapper.writeValueAsString(accountHolder);
 
@@ -132,7 +132,7 @@ class AccountHolderControllerImplTest {
     @Test
     void delete_validId_AccountHolder() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic UnV0aCBUZWxsZXJpYTpjYm1uY2htaGM=");
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
         MvcResult mvcResult = mockMvc.perform(delete("/accountHolders/" + accountHolder1.getId()).headers(httpHeaders))
                 .andExpect(status().isNoContent())
                 .andReturn();

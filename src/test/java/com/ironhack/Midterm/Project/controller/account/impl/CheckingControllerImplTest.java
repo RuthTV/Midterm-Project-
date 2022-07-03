@@ -1,6 +1,9 @@
 package com.ironhack.Midterm.Project.controller.account.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.Midterm.Project.controller.account.dto.CheckingDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.MoneyDTO;
+import com.ironhack.Midterm.Project.controller.account.dto.SavingDTO;
 import com.ironhack.Midterm.Project.model.accounts.Checking;
 import com.ironhack.Midterm.Project.model.money.Money;
 import com.ironhack.Midterm.Project.model.address.Address;
@@ -64,13 +67,13 @@ class CheckingControllerImplTest {
     @BeforeEach
     void setUp() {
         address = new Address("Ambasaguas 55", 48891);
-        admin = new Admin("Ruth Telleria", passwordEncoder.encode("cbmnchmhc"));
+        admin = new Admin("Ruth", passwordEncoder.encode("123456"));
         role = new Role("ADMIN", admin);
         admin.setRoles(Set.of(role));
         money = new Money(BigDecimal.valueOf(2000000), Currency.getInstance("USD"));
         money2 = new Money(BigDecimal.valueOf(245000), Currency.getInstance("USD"));
-        accountHolder = new AccountHolder("Julen Telleria", passwordEncoder.encode("dngmfhmf"), Date.valueOf("1991-12-12"), address);
-        checking1 = new Checking(money, "fngmhg_fhª", admin, Date.valueOf("2018-01-23"));
+        accountHolder = new AccountHolder("Julen", passwordEncoder.encode("1234"), Date.valueOf("1991-12-12"), address);
+        checking1 = new Checking(money, "fngmhg_fhª", admin, Date.valueOf("2022-06-03"));
         checking2 = new Checking(money2, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
         adminRepository.save(admin);
         accountHolderRepository.save(accountHolder);
@@ -86,27 +89,32 @@ class CheckingControllerImplTest {
 
     @Test
     void findAll_NoParams_AllCheckings() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/checkings"))
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        MvcResult mvcResult = mockMvc.perform(get("/checkings").headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2022-06-03"));
         assertTrue(mvcResult.getResponse().getContentAsString().contains("2016-12-23"));
     }
 
     @Test
     void findById_Id_Checking() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/checkings/id/"+checking1.getId()))
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        MvcResult mvcResult = mockMvc.perform(get("/checkings/id/"+checking1.getId()).headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("2018-01-23"));
-        assertFalse(mvcResult.getResponse().getContentAsString().contains("Ruth Telleria"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2022-06-03"));
     }
 
     @Test
     void findByUser_User_Checking() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/checkings/primaryOwner/"+checking2.getPrimaryOwner().getId()))
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        MvcResult mvcResult = mockMvc.perform(get("/checkings/primaryOwner/"+checking2.getPrimaryOwner().getId()).headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -116,32 +124,32 @@ class CheckingControllerImplTest {
     @Test
     void store() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Basic YWRtaW46Y2JtbmNobWhj");
-        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
-        Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
-        Checking checking = new Checking(money3, "123456",admin3, Date.valueOf("2020-01-23"));
-        String body = objectMapper.writeValueAsString(checking);
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        BigDecimal money3 = BigDecimal.valueOf(298000);
+        CheckingDTO checkingDTO = new CheckingDTO(money3, passwordEncoder.encode("123456ª"),accountHolder.getId(), Date.valueOf("2020-01-23"));
+        String body = objectMapper.writeValueAsString(checkingDTO);
         MvcResult mvcResult = mockMvc.perform(
-                        post("/checkings").headers(httpHeaders)
+                        post("/checkings").headers(httpHeaders).headers(httpHeaders)
                                 .content(body)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Lorena Pardo"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("2020-01-23"));
         assertEquals(3, checkingRepository.findAll().size());
     }
 
     @Test
     void update() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
-        Admin admin3 = new Admin("Lorena Pardo", "ahaegjsg");
-        Checking checking = new Checking(money3, "123456ª",admin3, Date.valueOf("2020-01-23"));
-        String body = objectMapper.writeValueAsString(checking);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        BigDecimal money3 = BigDecimal.valueOf(298000);
+        CheckingDTO checkingDTO = new CheckingDTO(money3, passwordEncoder.encode("123456ª"),accountHolder.getId(), Date.valueOf("2020-01-23"));
+        String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(
-                        put("/checkings/" + checking1.getId())
+                        put("/checkings/" + checking1.getId()).headers(httpHeaders)
                                 .content(body)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -150,31 +158,34 @@ class CheckingControllerImplTest {
 
         Optional<Checking> optionalChecking = checkingRepository.findById(checking1.getId());
         assertTrue(optionalChecking.isPresent());
-        assertEquals("Lorena Pardo", optionalChecking.get().getPrimaryOwner().getUsername());
+        assertEquals("Ruth", optionalChecking.get().getPrimaryOwner().getUsername());
     }
 
     @Test
     void updateBalance() throws Exception {
-        Money money3 = new Money(BigDecimal.valueOf(298000), Currency.getInstance("USD"));
-        Checking checking = new Checking(money3, "fzhgnhª", accountHolder, Date.valueOf("2016-12-23"));
-        String body = objectMapper.writeValueAsString(checking);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        MoneyDTO moneyDto = new MoneyDTO(BigDecimal.valueOf(298000));
+        String body = objectMapper.writeValueAsString(moneyDto);
 
         MvcResult mvcResult = mockMvc.perform(
-                        put("/checkings/" + checking2.getId())
+                        patch("/checkings/"+checking1.getId()+"/balance").headers(httpHeaders)
                                 .content(body)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andReturn();
 
-        Optional<Checking> optionalChecking = checkingRepository.findById(checking2.getId());
+        Optional<Checking> optionalChecking = checkingRepository.findById(checking1.getId());
         assertTrue(optionalChecking.isPresent());
         assertEquals(BigDecimal.valueOf(298000), optionalChecking.get().getBalance().getAmount());
     }
 
     @Test
     void delete_validId_CheckingRemoved() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(delete("/checkings/" + checking1.getId()))
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Basic UnV0aDoxMjM0NTY=");
+        MvcResult mvcResult = mockMvc.perform(delete("/checkings/" + checking1.getId()).headers(httpHeaders))
                 .andExpect(status().isNoContent())
                 .andReturn();
         assertFalse(checkingRepository.existsById(checking1.getId()));
