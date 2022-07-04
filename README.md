@@ -1,6 +1,11 @@
 ## About The Project
 
 In the data base you start with 2 Account Holder, 1 Admin and 1 ThirdParty created.
+-	Admin username Lorena Pardo, password 000000
+-	AccountHolder username Ruth Telleria, password 123456
+-	AccountHolder username Julen Telleria, password 654321
+-	Thirparty name Aitor Gonzalez, hashedKey 9876432
+
 But if you decide you can create new one, always form the Admin.
 
 Each tipa of User has a different set of permissions:
